@@ -30,6 +30,7 @@ struct _Game {
     Team* homeTeam;
     Team* awayTeam;
 };
+extern Game nullGame;
 
 #define MAX_TEAM_NAME 30
 #define MAX_LOC_NAME  30
@@ -38,4 +39,10 @@ struct _Team {
     char location[MAX_LOC_NAME];
     GameList* gameList;
 };
+
+struct _GameList {
+    Game game;
+    GameList* next;
+};
+
 #endif /* DATATYPES_H */

@@ -23,6 +23,9 @@ size_t readString(char* str, size_t maxlen) {
     return len;
 }
 
+/*
+  Checks if a string is a number.
+ */
 bool isStrNumber(const char* s) {
     while ( *s ) {
         if (!isdigit(*(s++)))

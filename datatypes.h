@@ -1,12 +1,7 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H 1
-/****************************** For Boolean Types *****************************/
-typedef unsigned char bool; /** For boolean types **/
-#define true  (!0)
-#define false  (0)
-/***************************** !For Boolean Types *****************************/
-
-typedef unsigned char uint8_t;
+#include "fixsizedtypes.h"
+#include "Date.h"
 
 /****** Forward declare a couple of things until we have implemented them *****/
 typedef struct _GameList GameList;
@@ -17,13 +12,7 @@ typedef struct _Game     Game;
 #define OUTCOME_HOMEWIN 1
 #define OUTCOME_DRAW    2
 #define OUTCOME_AWAYWIN 3
-typedef struct _Date {
-    int year;
-    uint8_t month, day;
-} Date;
-
 struct _Game {
-    int id; /* FIXME: Needed? */
     uint8_t outcome;
     Date date;
     int cachedPoints; /* Cached points. -1 indicates not cached yet */
@@ -43,6 +32,7 @@ struct _Team {
 struct _GameList {
     Game game;
     GameList* next;
+    GameList* prev;
 };
 
 #endif /* DATATYPES_H */

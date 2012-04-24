@@ -48,12 +48,19 @@ Team* getTeamFromInput(const char* input) {
     return NULL;
 }
 
-extern void doShowGames();      /** Make it explicit that they're defined elsewhere */
-extern void doListTeams();      /** Make it explicit that they're defined elsewhere */
-extern void doNewGame();        /** Make it explicit that they're defined elsewhere */
-extern void doDeleteGame();     /** Make it explicit that they're defined elsewhere */
-extern void doShowScoreboard(); /** Make it explicit that they're defined elsewhere */
-
+#if 0
+extern void doShowGames(void);      /** Make it explicit that they're defined elsewhere */
+extern void doListTeams(void);
+extern void doNewGame(const char*);
+extern void doDeleteGame(const char*);
+extern void doShowScoreboard(void);
+#else
+void doShowGames(void) {}
+void doListTeams(void) {}
+void doNewGame(const char* input) {printf("doNewGame() called with '%s'\n", input);}
+void doDeleteGame(const char* input) {printf("doDeleteGame() called with '%s'\n", input);}
+void doShowScoreboard(void) {}
+#endif
 int main(void) {
 #define MAX_CMD 30
     char cmd[MAX_CMD];
@@ -61,13 +68,14 @@ int main(void) {
     Team* selectedTeam;
 
     while(true) {
+        printf("What to do? "); fflush(stdout);
         while ( !readString(cmd, MAX_CMD) ) ;
 
         /** QUIT **/
         if ( ! strcmp(cmd, "QUIT") )
             break;
         /** SHOW TEAMS and SHOW <TEAM> */
-        else if ( !strcmp(cmd, "SHOW ") ) {
+        else if ( !strncmp(cmd, "SHOW ", 5) ) {
             if ( !strcmp(&cmd[5], "TEAMS") ) { /* 5 = strlen("SHOW "); */
                 gLastGameList = gGameList;
                 doShowGames(); /* FIXME: Pass remaining input? What for? */
@@ -81,8 +89,8 @@ int main(void) {
             doListTeams();
         }
         /** ADD GAME / CREATE / NEW / ADD ? FIXME, only one (or some) of these.**/
-        else if ( !strcmp(cmd, "ADD GAME ") ) {
-            doNewGame(&cmd[9]); /* 9 = strlen("ADD GAME") */
+        else if ( !strncmp(cmd, "ADD", 3) ) {
+            doNewGame(&cmd[4]); /* 4 = strlen("ADD ") */
         }
         /** DEL GAME. FIXME: Some other name? */
         else if ( !strcmp(cmd, "DEL") ) {
@@ -91,6 +99,10 @@ int main(void) {
         /** SCORE / SCOREBOARD. FIXME: Some other name? **/
         else if ( !strcmp(cmd, "SCORE") ) {
             doShowScoreboard();
+        }
+        /** Unrecognized command */
+        else {
+            printf("Unrecognized command.\n");
         }
 
     }

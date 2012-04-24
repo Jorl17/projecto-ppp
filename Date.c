@@ -1,4 +1,4 @@
-#include "datatypes.h"
+#include "Date.h"
 
 /**
   Compare 2 dates. Returns:
@@ -6,7 +6,7 @@
   -1  if d1 <  d2
    1  if d1 >  d2
 **/
-int compare_dates(const Date d1, const Date d2) {
+int compareDates(const Date d1, const Date d2) {
     if (   d1.year==d2.year   &&
            d1.month==d1.month &&
            d1.day == d2.month

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h> /* isdigit() */
 #include "datatypes.h"
+#include "GameList.h"
 /** Temporary assert stuff, until we move some code in main to other areas **/
 #include <assert.h>
 #define ASSERT assert
@@ -61,8 +62,9 @@ Team* getTeamFromInput(const char* input) {
     return NULL;
 }
 
-void printGame(Game* game) {
+void printGame(unsigned int id, Game* game) {
     ASSERT(game); ASSERT(game->homeTeam); ASSERT(game->awayTeam);
+    printf("%u. ", id);
     printDate(game->date, false);
     printf(": %s -- %s:\t", game->homeTeam->name, game->awayTeam->name);
 
@@ -81,7 +83,14 @@ extern void doNewGame(const char*);
 extern void doDeleteGame(const char*);
 extern void doShowScoreboard(void);
 #else
-void doShowGames(void) {}
+void doShowGames(void) {
+    GameList* local = LastGameList;
+    size_t c=0;
+    while(local->next) {
+        printGame(c++, &local->game);
+        local = local->next;
+    }
+}
 void doListTeams(void) {}
 void doNewGame(const char* input) {printf("doNewGame() called with '%s'\n", input);}
 void doDeleteGame(const char* input) {printf("doDeleteGame() called with '%s'\n", input);}

@@ -9,6 +9,5 @@ GameList*  LastGameList; /* Points to the last listed game list. */
 /* Stupid C90 disallows "dot" initialization. */
 Game nullGame = { /*.outcome=*/     0,
                   /*.date=*/        {0,0,0},
-                  /*.cachedPoints=*/0,
                   /*.homeTeam=*/    NULL,
                   /*.awayTeam=*/    NULL};

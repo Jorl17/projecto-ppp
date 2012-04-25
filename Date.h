@@ -13,6 +13,8 @@ typedef struct _Date {
   -1  if d1 <  d2
    1  if d1 >  d2
 **/
-int compareDates(const Date d1, const Date d2);
+int compareDates(Date d1, Date d2);
+void printDate(Date d, bool longFormat);
+
 
 #endif /* DATE_H */

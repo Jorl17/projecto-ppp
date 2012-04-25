@@ -3,6 +3,9 @@
 #include <string.h>
 #include <ctype.h> /* isdigit() */
 #include "datatypes.h"
+/** Temporary assert stuff, until we move some code in main to other areas **/
+#include <assert.h>
+#define ASSERT assert
 
 extern Team*      Teams;        /* All teams, ordered alphabetically */
 extern int        NumTeams;     /* We don't have a const keyword...  */
@@ -56,6 +59,19 @@ Team* getTeamFromInput(const char* input) {
 
     /** If all else fails... */
     return NULL;
+}
+
+void printGame(Game* game) {
+    ASSERT(game); ASSERT(game->homeTeam); ASSERT(game->awayTeam);
+    printDate(game->date, false);
+    printf(": %s -- %s:\t", game->homeTeam->name, game->awayTeam->name);
+
+    if (game->outcome == OUTCOME_HOMEWIN)
+        printf("Home Win\n");
+    else if (game->outcome == OUTCOME_AWAYWIN)
+        printf("Away Win\n");
+    else
+        printf("Draw\n");
 }
 
 #if 0

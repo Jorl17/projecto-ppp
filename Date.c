@@ -1,3 +1,4 @@
+#include <stdio.h> /* printf() */
 #include "Date.h"
 
 /**
@@ -6,7 +7,7 @@
   -1  if d1 <  d2
    1  if d1 >  d2
 **/
-int compareDates(const Date d1, const Date d2) {
+int compareDates(Date d1, Date d2) {
     if (   d1.year==d2.year   &&
            d1.month==d1.month &&
            d1.day == d2.month
@@ -25,4 +26,11 @@ int compareDates(const Date d1, const Date d2) {
         return -1;
     else /* Hence (d2.day < d1.day) */
         return 1;
+}
+
+void printDate(Date d, bool longFormat) {
+    if (longFormat)
+        return ; /* FIXME: Do long format printing here... */
+    else
+        printf("%2d/%2d/%4d", d.day, d.month, d.year);
 }

@@ -77,9 +77,8 @@ void GameListAddGame(GameList* list, Game g) {
 }
 
 void GameListDelGame(GameList* list) {
-    GameList* prev = list->prev;
     ASSERT(list);
-    prev->next = list->next;
-    list->prev = prev;
+    list->prev->next = list->next;
+    list->next->prev = list->prev;
     free(list);
 }

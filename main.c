@@ -4,7 +4,7 @@
 #include <ctype.h> /* isdigit() */
 #include "datatypes.h"
 
-extern Team**     Teams;        /* All teams, ordered alphabetically */
+extern Team*      Teams;        /* All teams, ordered alphabetically */
 extern int        NumTeams;     /* We don't have a const keyword...  */
 extern GameList*  Games;        /* Has all games ordered by date */
 extern GameList*  LastGameList; /* Points to the last listed game list. */
@@ -36,13 +36,23 @@ bool isStrNumber(const char* s) {
 }
 
 Team* getTeamFromInput(const char* input) {
+    int iMax=0, iMin=0, iMed;
     if ( isStrNumber(input) ) {
         int i = atoi(input);
         if ( i >= 0 && i < NumTeams)
-            return Teams[i];
+            return &Teams[i];
     }
-    /* input must have the team name. implement a good searching algorithm here.
-       Binary search? FIXME */
+    /* input must have the team name. FIXME. Trim string (remove whitespace)*/
+    while (iMax > iMin) {
+        iMed = (iMax + iMin) / 2;
+        if (Teams[iMed].name < input)
+            iMin = iMed+1;
+        else if (Teams[iMed].name > input)
+            iMax = iMed-1;
+        else
+            return &Teams[iMed];
+    }
+
 
     /** If all else fails... */
     return NULL;

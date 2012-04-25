@@ -4,10 +4,10 @@
 #include <ctype.h> /* isdigit() */
 #include "datatypes.h"
 
-extern Team**     gTeams;        /* All teams, ordered alphabetically */
-extern int        gNumTeams;     /* We don't have a const keyword...  */
-extern GameList*  gGameList;     /* Has all games ordered by date */
-extern GameList*  gLastGameList; /* Points to the last listed game list. */
+extern Team**     Teams;        /* All teams, ordered alphabetically */
+extern int        NumTeams;     /* We don't have a const keyword...  */
+extern GameList*  Games;        /* Has all games ordered by date */
+extern GameList*  LastGameList; /* Points to the last listed game list. */
 
 /***
   Reads a string from standard input. Returns the length of the string or 0
@@ -38,8 +38,8 @@ bool isStrNumber(const char* s) {
 Team* getTeamFromInput(const char* input) {
     if ( isStrNumber(input) ) {
         int i = atoi(input);
-        if ( i >= 0 && i < gNumTeams)
-            return gTeams[i];
+        if ( i >= 0 && i < NumTeams)
+            return Teams[i];
     }
     /* input must have the team name. implement a good searching algorithm here.
        Binary search? FIXME */
@@ -77,10 +77,10 @@ int main(void) {
         /** SHOW TEAMS and SHOW <TEAM> */
         else if ( !strncmp(cmd, "SHOW ", 5) ) {
             if ( !strcmp(&cmd[5], "TEAMS") ) { /* 5 = strlen("SHOW "); */
-                gLastGameList = gGameList;
+                LastGameList = Games;
                 doShowGames(); /* FIXME: Pass remaining input? What for? */
             } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
-                gLastGameList = selectedTeam->gameList;
+                LastGameList = selectedTeam->gameList;
                 doShowGames(); /* FIXME: Pass remaining input? What for? */
             }
         }

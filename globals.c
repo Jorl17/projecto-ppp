@@ -1,10 +1,10 @@
 #include "datatypes.h"
 #include <stdlib.h> /* For NULL */
 
-Team**     gTeams;        /* All teams, ordered alphabetically */
-int        gNumTeams;     /* We don't have a const keyword...  */
-GameList*  gGameList;     /* Has all games ordered by date */
-GameList*  gLastGameList; /* Points to the last listed game list. */
+Team**     Teams;        /* All teams, ordered alphabetically */
+int        NumTeams;     /* We don't have a const keyword...  */
+GameList*  Games;        /* Has all games ordered by date */
+GameList*  LastGameList; /* Points to the last listed game list. */
 
 /* Stupid C90 disallows "dot" initialization. */
 Game nullGame = { /*.outcome=*/     0,

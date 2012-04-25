@@ -15,7 +15,6 @@ typedef struct _Game     Game;
 struct _Game {
     uint8_t outcome;
     Date date;
-    int cachedPoints; /* Cached points. -1 indicates not cached yet */
     Team* homeTeam;
     Team* awayTeam;
 };
@@ -26,6 +25,7 @@ extern Game nullGame;
 struct _Team {
     char name[MAX_TEAM_NAME];
     char location[MAX_LOC_NAME];
+    int cachedPoints; /* Cached points. -1 indicates not cached yet */
     GameList* gameList;
 };
 

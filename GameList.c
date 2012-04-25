@@ -44,7 +44,7 @@ void GameListSearch(GameList* list, const Game* key, GameList** curr, GameList**
 
         if (!(*curr))
             break; /* Not found */
-        compareOutcome = compareDates((*curr)->game.date, key->date) <0;
+        compareOutcome = compareDates((*curr)->game.date, key->date) ;
 
         if (compareOutcome >= 0) {
             break; /* Found the same date or a bigger date */

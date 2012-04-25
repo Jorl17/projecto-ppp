@@ -29,10 +29,4 @@ struct _Team {
     GameList* gameList;
 };
 
-struct _GameList {
-    Game game;
-    GameList* next;
-    GameList* prev;
-};
-
 #endif /* DATATYPES_H */

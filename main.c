@@ -43,7 +43,7 @@ Team* getTeamFromInput(const char* input) {
             return &Teams[i];
     }
     /* input must have the team name. FIXME. Trim string (remove whitespace)*/
-    while (iMax > iMin) {
+    while (iMax >= iMin) {
         iMed = (iMax + iMin) / 2;
         if (Teams[iMed].name < input)
             iMin = iMed+1;

@@ -40,7 +40,7 @@ bool isStrNumber(const char* s) {
 }
 
 Team* getTeamFromInput(const char* input) {
-    int iMax=0, iMin=0, iMed;
+    int iMax=NumTeams-1, iMin=0, iMed, compare;
     if ( isStrNumber(input) ) {
         int i = atoi(input);
         if ( i >= 0 && i < NumTeams)
@@ -49,14 +49,14 @@ Team* getTeamFromInput(const char* input) {
     /* input must have the team name. FIXME. Trim string (remove whitespace)*/
     while (iMax >= iMin) {
         iMed = (iMax + iMin) / 2;
-        if (Teams[iMed].name < input)
+        compare = strcmp(Teams[iMed].name,input);
+        if (compare < 0) /* A < B */
             iMin = iMed+1;
-        else if (Teams[iMed].name > input)
+        else if (compare > 0) /* A > B */
             iMax = iMed-1;
         else
             return &Teams[iMed];
     }
-
 
     /** If all else fails... */
     return NULL;
@@ -96,10 +96,11 @@ void doShowGames(void) {
 void doListTeams(void) {
     size_t i, len, j;
     /*               30 characters                   30 characters      Right aligned */
-    printf("________________________________________________________________________\n"
-           "|            Nome              |          Localidade          | Pontos |\n"
-           "|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
+    printf("___________________________________________________________________________\n"
+           "| id |            Nome              |          Localidade          | Pontos |\n"
+           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
     for (i=0; i < NumTeams; i++) {
+        printf("|%-4lu", i);
         /** Print Name centered **/
         printf("|");
         len = strlen(Teams[i].name);
@@ -125,7 +126,7 @@ void doListTeams(void) {
         printf("|\n");
     }
 
-    printf("------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------------\n");
 }
 void doNewGame(const char* input) {printf("doNewGame() called with '%s'\n", input);}
 void doDeleteGame(const char* input) {printf("doDeleteGame() called with '%s'\n", input);}
@@ -137,15 +138,15 @@ int main(void) {
     /*size_t cmdlen; NOT YET USED */
     Team* selectedTeam;
     Teams = (Team*)malloc(3*sizeof(Team));
-    strcpy(Teams[0].name, "FC Porto");
+    strcpy(Teams[0].name, "AB Porto");
     strcpy(Teams[0].location, "Porto, Portugal");
     Teams[0].cachedPoints = 64;
 
-    strcpy(Teams[1].name, "SL Benfica");
+    strcpy(Teams[1].name, "BE Benfica");
     strcpy(Teams[1].location, "Lisboa, Portugal");
     Teams[1].cachedPoints = 32;
 
-    strcpy(Teams[2].name, "SC Braga");
+    strcpy(Teams[2].name, "CD Braga");
     strcpy(Teams[2].location, "Braga, Portugal");
     Teams[2].cachedPoints = 63;
     NumTeams = 3;
@@ -163,6 +164,7 @@ int main(void) {
                 doShowGames(); /* FIXME: Pass remaining input? What for? */
             } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
                 LastGameList = selectedTeam->gameList;
+                printf("TEAM: %s\n", selectedTeam->name); /* FIXME: Debugging */
                 doShowGames(); /* FIXME: Pass remaining input? What for? */
             }
         }

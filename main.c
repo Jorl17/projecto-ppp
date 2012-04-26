@@ -96,7 +96,7 @@ void doShowGames(void) {
 void doListTeams(void) {
     size_t i, len, j;
     /*               30 characters                   30 characters      Right aligned */
-    printf("___________________________________________________________________________\n"
+    printf("_____________________________________________________________________________\n"
            "| id |            Nome              |          Localidade          | Pontos |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
     for (i=0; i < NumTeams; i++) {

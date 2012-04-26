@@ -84,6 +84,7 @@ extern void doDeleteGame(const char*);
 extern void doShowScoreboard(void);
 #else
 void doShowGames(void) {
+    ASSERT(LastGameList);
     GameList* local = LastGameList;
     size_t c=0;
     while(local->next) {
@@ -91,7 +92,41 @@ void doShowGames(void) {
         local = local->next;
     }
 }
-void doListTeams(void) {}
+
+void doListTeams(void) {
+    size_t i, len, j;
+    /*               30 characters                   30 characters      Right aligned */
+    printf("________________________________________________________________________\n"
+           "|            Nome              |          Localidade          | Pontos |\n"
+           "|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
+    for (i=0; i < NumTeams; i++) {
+        /** Print Name centered **/
+        printf("|");
+        len = strlen(Teams[i].name);
+        for (j = 1; j <= (30-len)/2; j++)
+            printf(" ");
+        printf("%s", Teams[i].name);
+        j+=len;
+        for (; j <= 30; j++)
+            printf(" ");
+
+        /** Print location centered **/
+        printf("|");
+        len = strlen(Teams[i].location);
+        for (j = 1; j <= (30-len)/2; j++)
+            printf(" ");
+        printf("%s", Teams[i].location);
+        j+=len;
+        for (; j <= 30; j++)
+            printf(" ");
+
+        /** Print points right aligned with 1 space to the left and to the right **/
+        printf("| %6d ", Teams[i].cachedPoints); /* Fixme, hacked in for testing. We need a TeamGetPoints() that sets up cache and all that */
+        printf("|\n");
+    }
+
+    printf("------------------------------------------------------------------------\n");
+}
 void doNewGame(const char* input) {printf("doNewGame() called with '%s'\n", input);}
 void doDeleteGame(const char* input) {printf("doDeleteGame() called with '%s'\n", input);}
 void doShowScoreboard(void) {}
@@ -101,7 +136,19 @@ int main(void) {
     char cmd[MAX_CMD];
     /*size_t cmdlen; NOT YET USED */
     Team* selectedTeam;
+    Teams = (Team*)malloc(3*sizeof(Team));
+    strcpy(Teams[0].name, "FC Porto");
+    strcpy(Teams[0].location, "Porto, Portugal");
+    Teams[0].cachedPoints = 64;
 
+    strcpy(Teams[1].name, "SL Benfica");
+    strcpy(Teams[1].location, "Lisboa, Portugal");
+    Teams[1].cachedPoints = 32;
+
+    strcpy(Teams[2].name, "SC Braga");
+    strcpy(Teams[2].location, "Braga, Portugal");
+    Teams[2].cachedPoints = 63;
+    NumTeams = 3;
     while(true) {
         printf("What to do? "); fflush(stdout);
         while ( !readString(cmd, MAX_CMD) ) ;

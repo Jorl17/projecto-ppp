@@ -1,8 +1,8 @@
 #include "datatypes.h"
-#include <stdlib.h> /* For NULL */
+#include <stdlib.h> /* For NULL, size_t */
 
 Team*      Teams;        /* All teams, ordered alphabetically */
-int        NumTeams;     /* We don't have a const keyword...  */
+size_t     NumTeams;     /* We don't have a const keyword...  */
 GameList*  Games;        /* Has all games ordered by date */
 GameList*  LastGameList; /* Points to the last listed game list. */
 

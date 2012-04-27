@@ -54,6 +54,9 @@ static GameList* GameListSearch(GameList* list, const Game* key) {
 
         compareOutcome = compareDates(list->game.date, key->date) ;
 
+        /* If we finally find an element whose date is bigger than ours or equal,
+          then, to keep order, we must be inserted right before it. Our seearch
+          has ended */
         if (compareOutcome >= 0) {
             break;
         }

@@ -8,6 +8,7 @@
 #include <assert.h>
 #define ASSERT assert
 
+/* FIXME: Where to put this? */
 extern Team*      Teams;        /* All teams, ordered alphabetically */
 extern size_t     NumTeams;     /* We don't have a const keyword...  */
 extern GameList*  Games;        /* Has all games ordered by date */
@@ -58,11 +59,12 @@ Team* getTeamFromInput(const char* input) {
             return &Teams[iMed];
     }
 
-    /** If all else fails... */
+    /** If all else fails... **/
     return NULL;
 }
 
 void printGame(unsigned int id, Game* game) {
+    /* FIXME: This is only a very raw prototype */
     ASSERT(game);
     printf("%u. ", id);
     printDate(game->date, false);
@@ -136,6 +138,8 @@ int main(void) {
 #define MAX_CMD 30
     char cmd[MAX_CMD];
     /*size_t cmdlen; NOT YET USED */
+
+    /******************************** TESTING STUFF *******************************/
     Team* selectedTeam;
     Teams = (Team*)malloc(3*sizeof(Team));
     strcpy(Teams[0].name, "AB Porto");
@@ -151,6 +155,8 @@ int main(void) {
     Teams[2].cachedPoints = 63;
     NumTeams = 3;
     Games = GameListNew();
+    /** This stuff triggers ANSI C pedantic warnings, but it's in the testing
+      part, so it's ok.**/
     Game game1 = { /*.outcome=*/     OUTCOME_HOMEWIN,
                       /*.date=*/        {5,5,1993},
                    /*.homeTeam=*/    &Teams[0],
@@ -173,15 +179,17 @@ int main(void) {
                    /*.awayTeam=*/    &Teams[1]};
     LastGameList = Games;
     GameListAddGame(Games, game1);
-    doShowGames();
+    doShowGames(); printf("\n");
     GameListAddGame(Games, game2);
-    doShowGames();
+    doShowGames();printf("\n");
     GameListAddGame(Games, game3);
-    doShowGames();
+    doShowGames();printf("\n");
     GameListAddGame(Games, game4);
-    doShowGames();
+    doShowGames();printf("\n");
     GameListAddGame(Games, game5);
-    doShowGames();
+    doShowGames();printf("\n");
+    /******************************* !TESTING STUFF *******************************/
+
     while(true) {
         printf("What to do? "); fflush(stdout);
         while ( !readString(cmd, MAX_CMD) ) ;
@@ -193,13 +201,13 @@ int main(void) {
         else if ( !strncmp(cmd, "SHOW ", 5) ) {
             if ( !strcmp(&cmd[5], "TEAMS") ) { /* 5 = strlen("SHOW "); */
                 LastGameList = Games;
-                doShowGames(); /* FIXME: Pass remaining input? What for? */
+                doShowGames();
             } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
                 LastGameList = selectedTeam->gameList;
-                printf("TEAM: %s\n", selectedTeam->name); /* FIXME: Debugging */
-                doShowGames(); /* FIXME: Pass remaining input? What for? */
+                printf("TEAM: %s\n", selectedTeam->name); /* FIXME: TESTING */
+                doShowGames();
             } else
-                goto wrong_command; /*EVIL!*/
+                goto wrong_command; /*FIXME: 'EVIL' GOTO!*/
         }
         /** LIST **/
         else if ( !strcmp(cmd, "LIST") ) {
@@ -217,7 +225,7 @@ int main(void) {
         else if ( !strcmp(cmd, "SCORE") ) {
             doShowScoreboard();
         }
-        /** Unrecognized command */
+        /** Unrecognized command **/
         else {
             wrong_command:
             printf("Unrecognized command.\n");
@@ -225,9 +233,11 @@ int main(void) {
 
     }
 
-    /* FIXME: Only here for testing */
+    /******************************** TESTING STUFF *******************************/
     GameListDelete(Games);
     free(Teams);
+    /******************************* !TESTING STUFF *******************************/
+
     return 0;
 }
 

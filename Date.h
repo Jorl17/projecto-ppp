@@ -3,8 +3,8 @@
 #include "fixsizedtypes.h"
 
 typedef struct _Date {
+    uint8_t day, month;
     unsigned int year;
-    uint8_t month, day;
 } Date;
 
 /**
@@ -15,6 +15,6 @@ typedef struct _Date {
 **/
 int compareDates(Date d1, Date d2);
 void printDate(Date d, bool longFormat);
-
+extern Date DATEMAX, DATEMIN;
 
 #endif /* DATE_H */

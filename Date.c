@@ -9,8 +9,8 @@
 **/
 int compareDates(Date d1, Date d2) {
     if (   d1.year==d2.year   &&
-           d1.month==d1.month &&
-           d1.day == d2.month
+           d1.month==d2.month &&
+           d1.day == d2.day
        )
         return 0;
 
@@ -34,3 +34,6 @@ void printDate(Date d, bool longFormat) {
     else
         printf("%2d/%2d/%4d", d.day, d.month, d.year);
 }
+
+Date DATEMAX = {(uint8_t)-1, (uint8_t)-1, (unsigned int)-1};
+Date DATEMIN = {0,0,0};

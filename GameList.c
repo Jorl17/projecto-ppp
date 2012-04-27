@@ -5,7 +5,7 @@
 #include "Date.h"   /* compareDates() */
 #define ASSERT assert
 /*
-  Create a new list -- simply create the header.
+  Create a new list -- simply create the header and the footer.
  */
 GameList* GameListNew(void) {
     GameList* list = (GameList*)malloc(sizeof(GameList));
@@ -13,6 +13,15 @@ GameList* GameListNew(void) {
         list->game = nullGame;
         list->next = NULL;
         list->prev = NULL;
+    }
+
+    list->next = (GameList*)malloc(sizeof(GameList));
+
+    if (list->next) {
+        list->next->game = nullGame;
+        list->next->game.date = DATEMAX;
+        list->next->prev = list;
+        list->next->next = NULL;
     }
 
     return list;
@@ -31,38 +40,34 @@ void GameListDelete(GameList* list) {
 
 /*
   Find the first element whose date is greater than or equal to that of Key.
-  In the end, *curr will have that element and *prev the element right before it.
-  In case such an element isn't found, *curr will have the header.
+  We return that element or the footer, meaning that the returned element
+  is the element that should go after a new element (to keep the order).
 
  */
-void GameListSearch(GameList* list, const Game* key, GameList** curr, GameList** prev) {
+static GameList* GameListSearch(GameList* list, const Game* key) {
     int compareOutcome;
-    ASSERT(list); ASSERT(key); ASSERT(curr); ASSERT(prev); ASSERT(*curr); ASSERT(*prev);
+    ASSERT(list); ASSERT(key);
 
-    *prev = list; *curr = list->next; /* *prev is pointing to the header now */;
-    while ( true ) {
+    list = list->next; /* Go over the header */
 
-        if (!(*curr))
-            break; /* Not found */
-        compareOutcome = compareDates((*curr)->game.date, key->date) ;
+    while ( list->next ) { /* While we haven't reached the footer */
+
+        compareOutcome = compareDates(list->game.date, key->date) ;
 
         if (compareOutcome >= 0) {
-            break; /* Found the same date or a bigger date */
+            break;
         }
 
-        *prev = list;
-        *curr = (*curr)->next;
-    }
+        list = list->next;
 
+    }
+    return list;
 }
 
 void GameListAddGame(GameList* list, Game g) {
-    GameList* nodeToGoBefore;
-    GameList* nodeToGoAfter;
     GameList* node;
+    GameList* nodeToBeAfterNew;
     ASSERT(list);
-
-    GameListSearch(list, &g, &nodeToGoBefore, &nodeToGoAfter);
 
     node = (GameList*) malloc(sizeof(GameList));
     if ( !node ) {
@@ -70,10 +75,13 @@ void GameListAddGame(GameList* list, Game g) {
         return ;
     }
 
-    nodeToGoBefore->prev = node;
-    node->next = nodeToGoBefore;
-    nodeToGoAfter->next = node;
-    node->prev = nodeToGoAfter;
+    nodeToBeAfterNew = GameListSearch(list, &g);
+    node->game = g;
+    node->next = nodeToBeAfterNew;
+    nodeToBeAfterNew->prev->next = node;
+    node->prev = nodeToBeAfterNew->prev;
+    nodeToBeAfterNew->prev = node;
+
 }
 
 void GameListDelGame(GameList* list) {

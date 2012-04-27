@@ -9,7 +9,7 @@
 #define ASSERT assert
 
 extern Team*      Teams;        /* All teams, ordered alphabetically */
-extern int        NumTeams;     /* We don't have a const keyword...  */
+extern size_t     NumTeams;     /* We don't have a const keyword...  */
 extern GameList*  Games;        /* Has all games ordered by date */
 extern GameList*  LastGameList; /* Points to the last listed game list. */
 
@@ -42,8 +42,8 @@ bool isStrNumber(const char* s) {
 Team* getTeamFromInput(const char* input) {
     int iMax=NumTeams-1, iMin=0, iMed, compare;
     if ( isStrNumber(input) ) {
-        int i = atoi(input);
-        if ( i >= 0 && i < NumTeams)
+        size_t i = (size_t)atoi(input);
+        if (i < NumTeams)
             return &Teams[i];
     }
     /* input must have the team name. FIXME. Trim string (remove whitespace)*/
@@ -63,7 +63,7 @@ Team* getTeamFromInput(const char* input) {
 }
 
 void printGame(unsigned int id, Game* game) {
-    ASSERT(game); ASSERT(game->homeTeam); ASSERT(game->awayTeam);
+    ASSERT(game);
     printf("%u. ", id);
     printDate(game->date, false);
     printf(": %s -- %s:\t", game->homeTeam->name, game->awayTeam->name);
@@ -85,10 +85,10 @@ extern void doShowScoreboard(void);
 #else
 void doShowGames(void) {
     ASSERT(LastGameList);
-    GameList* local = LastGameList;
+    GameList* local = LastGameList->next;
     size_t c=0;
     while(local->next) {
-        printGame(c++, &local->game);
+        printGame(c++, &(local->game));
         local = local->next;
     }
 }
@@ -150,6 +150,38 @@ int main(void) {
     strcpy(Teams[2].location, "Braga, Portugal");
     Teams[2].cachedPoints = 63;
     NumTeams = 3;
+    Games = GameListNew();
+    Game game1 = { /*.outcome=*/     OUTCOME_HOMEWIN,
+                      /*.date=*/        {5,5,1993},
+                   /*.homeTeam=*/    &Teams[0],
+                   /*.awayTeam=*/    &Teams[1]};
+    Game game2 = { /*.outcome=*/     OUTCOME_AWAYWIN,
+                      /*.date=*/        {4,5,1993},
+                   /*.homeTeam=*/    &Teams[0],
+                   /*.awayTeam=*/    &Teams[1]};
+    Game game3 = { /*.outcome=*/     OUTCOME_DRAW,
+                      /*.date=*/        {5,5,1993},
+                   /*.homeTeam=*/    &Teams[2],
+                   /*.awayTeam=*/    &Teams[1]};
+    Game game4 = { /*.outcome=*/     OUTCOME_HOMEWIN,
+                      /*.date=*/        {7,5,1993},
+                   /*.homeTeam=*/    &Teams[0],
+                   /*.awayTeam=*/    &Teams[1]};
+    Game game5 = { /*.outcome=*/     OUTCOME_HOMEWIN,
+                      /*.date=*/        {2,5,1993},
+                   /*.homeTeam=*/    &Teams[0],
+                   /*.awayTeam=*/    &Teams[1]};
+    LastGameList = Games;
+    GameListAddGame(Games, game1);
+    doShowGames();
+    GameListAddGame(Games, game2);
+    doShowGames();
+    GameListAddGame(Games, game3);
+    doShowGames();
+    GameListAddGame(Games, game4);
+    doShowGames();
+    GameListAddGame(Games, game5);
+    doShowGames();
     while(true) {
         printf("What to do? "); fflush(stdout);
         while ( !readString(cmd, MAX_CMD) ) ;
@@ -166,7 +198,8 @@ int main(void) {
                 LastGameList = selectedTeam->gameList;
                 printf("TEAM: %s\n", selectedTeam->name); /* FIXME: Debugging */
                 doShowGames(); /* FIXME: Pass remaining input? What for? */
-            }
+            } else
+                goto wrong_command; /*EVIL!*/
         }
         /** LIST **/
         else if ( !strcmp(cmd, "LIST") ) {
@@ -186,6 +219,7 @@ int main(void) {
         }
         /** Unrecognized command */
         else {
+            wrong_command:
             printf("Unrecognized command.\n");
         }
 

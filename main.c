@@ -225,6 +225,9 @@ int main(void) {
 
     }
 
+    /* FIXME: Only here for testing */
+    GameListDelete(Games);
+    free(Teams);
     return 0;
 }
 

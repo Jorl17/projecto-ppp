@@ -11,7 +11,6 @@
 typedef struct _GameList GameList;
 typedef struct _Team     Team;
 typedef struct _Game     Game;
-extern Game NULL_GAME;
 
 struct _Team {
     char name[NAME_SIZE];
@@ -19,5 +18,8 @@ struct _Team {
     int cachedPoints; /* -1 indicates not cached yet */
     GameList* gameList;
 };
+
+extern Team*      Teams;        /* All teams, ordered alphabetically */
+extern size_t     NUM_TEAMS;
 
 #endif /* DATATYPES_H */

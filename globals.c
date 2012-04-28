@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 Team*      Teams;        /* All teams, ordered alphabetically */
-size_t     NumTeams;
+size_t     NUM_TEAMS;
 GameList*  Games;        /* Has all games ordered by date */
 GameList*  LastGameList; /* Points to the last listed game list. */
 

@@ -7,15 +7,15 @@
 
 /* FIXME: Where to put this? */
 extern Team*      Teams;        /* All teams, ordered alphabetically */
-extern size_t     NumTeams; 
+extern size_t     NUM_TEAMS;
 extern GameList*  Games;        /* Has all games ordered by date */
 extern GameList*  LastGameList; /* Points to the last listed game list. */
 
 Team* getTeamFromInput(const char* input) {
-    int iMax=NumTeams-1, iMin=0, iMed, compare;
+    int iMax=NUM_TEAMS-1, iMin=0, iMed, compare;
     if ( isStrNumber(input) ) {
         size_t i = (size_t)atoi(input);
-        if (i < NumTeams)
+        if (i < NUM_TEAMS)
             return &Teams[i];
     }
     /* input must have the team name. FIXME. Trim string (remove whitespace)*/
@@ -50,13 +50,13 @@ void printGame(unsigned int id, Game* game) {
 }
 
 #if 0
-extern void doShowGames(void);      /** Make it explicit that they're defined elsewhere */
-extern void doListTeams(void);
-extern void doNewGame(const char*);
-extern void doDeleteGame(const char*);
-extern void doShowScoreboard(void);
+extern void ShowGames(void);      /** Make it explicit that they're defined elsewhere */
+extern void ListTeams(void);
+extern void NewGame(const char*);
+extern void DeleteGame(const char*);
+extern void ShowScoreboard(void);
 #else
-void doShowGames(void) {
+void ShowGames(void) {
     ASSERT(LastGameList);
     GameList* local = LastGameList->next;
     size_t c=0;
@@ -66,13 +66,13 @@ void doShowGames(void) {
     }
 }
 
-void doListTeams(void) {
+void ListTeams(void) {
     size_t i, len, j;
     /*               30 characters                   30 characters      Right aligned */
     printf("_____________________________________________________________________________\n"
            "| id |            Nome              |          Localidade          | Pontos |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
-    for (i=0; i < NumTeams; i++) {
+    for (i=0; i < NUM_TEAMS; i++) {
         printf("|%-4lu", i);
         /** Print Name centered **/
         printf("|");
@@ -101,9 +101,9 @@ void doListTeams(void) {
 
     printf("------------------------------------------------------------------------------\n");
 }
-void doNewGame(const char* input) {printf("doNewGame() called with '%s'\n", input);}
-void doDeleteGame(const char* input) {printf("doDeleteGame() called with '%s'\n", input);}
-void doShowScoreboard(void) {}
+void NewGame(const char* input) {printf("NewGame() called with '%s'\n", input);}
+void DeleteGame(const char* input) {printf("DeleteGame() called with '%s'\n", input);}
+void ShowScoreboard(void) {}
 #endif
 int main(void) {
 #define MAX_CMD 30
@@ -124,7 +124,7 @@ int main(void) {
     strcpy(Teams[2].name, "CD Braga");
     strcpy(Teams[2].location, "Braga, Portugal");
     Teams[2].cachedPoints = 63;
-    NumTeams = 3;
+    NUM_TEAMS = 3;
     Games = GameListNew();
     /** This stuff triggers ANSI C pedantic warnings, but it's in the testing
       part, so it's ok.**/
@@ -150,15 +150,15 @@ int main(void) {
                    /*.awayTeam=*/    &Teams[1]};
     LastGameList = Games;
     GameListAddGame(Games, game1);
-    doShowGames(); printf("\n");
+    ShowGames(); printf("\n");
     GameListAddGame(Games, game2);
-    doShowGames();printf("\n");
+    ShowGames();printf("\n");
     GameListAddGame(Games, game3);
-    doShowGames();printf("\n");
+    ShowGames();printf("\n");
     GameListAddGame(Games, game4);
-    doShowGames();printf("\n");
+    ShowGames();printf("\n");
     GameListAddGame(Games, game5);
-    doShowGames();printf("\n");
+    ShowGames();printf("\n");
     /******************************* !TESTING STUFF *******************************/
 
     while(true) {
@@ -172,29 +172,29 @@ int main(void) {
         else if ( !strncmp(cmd, "SHOW ", 5) ) {
             if ( !strcmp(&cmd[5], "TEAMS") ) { /* 5 = strlen("SHOW "); */
                 LastGameList = Games;
-                doShowGames();
+                ShowGames();
             } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
                 LastGameList = selectedTeam->gameList;
                 printf("TEAM: %s\n", selectedTeam->name); /* FIXME: TESTING */
-                doShowGames();
+                ShowGames();
             } else
                 goto wrong_command; /*FIXME: 'EVIL' GOTO!*/
         }
         /** LIST **/
         else if ( !strcmp(cmd, "LIST") ) {
-            doListTeams();
+            ListTeams();
         }
         /** ADD GAME / CREATE / NEW / ADD ? FIXME, only one (or some) of these.**/
         else if ( !strncmp(cmd, "ADD", 3) ) {
-            doNewGame(&cmd[4]); /* 4 = strlen("ADD ") */
+            NewGame(&cmd[4]); /* 4 = strlen("ADD ") */
         }
         /** DEL GAME. FIXME: Some other name? */
         else if ( !strcmp(cmd, "DEL") ) {
-            doDeleteGame(&cmd[3]); /* 3 = strlen("DEL") */
+            DeleteGame(&cmd[3]); /* 3 = strlen("DEL") */
         }
         /** SCORE / SCOREBOARD. FIXME: Some other name? **/
         else if ( !strcmp(cmd, "SCORE") ) {
-            doShowScoreboard();
+            ShowScoreboard();
         }
         /** Unrecognized command **/
         else {

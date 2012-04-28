@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 /*
-  Reads a string from standard input. Returns the length of the string or 0
+  Reads a string from input. Returns the length of the string or 0
   if there was an error.
 */
 size_t readString(char* str, size_t maxlen) {
@@ -18,7 +18,7 @@ size_t readString(char* str, size_t maxlen) {
 }
 
 /*
-  Checks if a string is a number.
+  Checks if a string is string a number.
  */
 bool isStrNumber(const char* s) {
     while ( *s ) {

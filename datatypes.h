@@ -3,29 +3,20 @@
 #include "fixsizedtypes.h"
 #include "Date.h"
 
-/****** Forward declare a couple of things until we have implemented them *****/
-typedef struct _GameList GameList;
-typedef struct _Team     Team;
-typedef struct _Game     Game;
-/***** !Forward declare a couple of things until we have implemented them *****/
-
 #define OUTCOME_HOMEWIN 1
 #define OUTCOME_DRAW    2
 #define OUTCOME_AWAYWIN 3
-struct _Game {
-    uint8_t outcome;
-    Date date;
-    Team* homeTeam;
-    Team* awayTeam;
-};
-extern Game nullGame;
+#define NAME_SIZE 30
 
-#define MAX_TEAM_NAME 30
-#define MAX_LOC_NAME  30
+typedef struct _GameList GameList;
+typedef struct _Team     Team;
+typedef struct _Game     Game;
+extern Game NULL_GAME;
+
 struct _Team {
-    char name[MAX_TEAM_NAME];
-    char location[MAX_LOC_NAME];
-    int cachedPoints; /* Cached points. -1 indicates not cached yet */
+    char name[NAME_SIZE];
+    char location[NAME_SIZE];
+    int cachedPoints; /* -1 indicates not cached yet */
     GameList* gameList;
 };
 

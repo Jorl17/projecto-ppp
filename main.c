@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h> /* isdigit() */
+#include "string.h"
 #include "datatypes.h"
 #include "GameList.h"
 /** Temporary assert stuff, until we move some code in main to other areas **/
@@ -10,35 +7,9 @@
 
 /* FIXME: Where to put this? */
 extern Team*      Teams;        /* All teams, ordered alphabetically */
-extern size_t     NumTeams;     /* We don't have a const keyword...  */
+extern size_t     NumTeams; 
 extern GameList*  Games;        /* Has all games ordered by date */
 extern GameList*  LastGameList; /* Points to the last listed game list. */
-
-/***
-  Reads a string from standard input. Returns the length of the string or 0
-  if there was an error.
-*/
-size_t readString(char* str, size_t maxlen) {
-    size_t len;
-    if ( ! fgets(str, maxlen, stdin) )
-        return 0;
-
-    len = strlen(str);
-    str[len-1]='\0';
-    return len;
-}
-
-/*
-  Checks if a string is a number.
- */
-bool isStrNumber(const char* s) {
-    while ( *s ) {
-        if (!isdigit(*(s++)))
-                return false;
-    }
-
-    return true;
-}
 
 Team* getTeamFromInput(const char* input) {
     int iMax=NumTeams-1, iMin=0, iMed, compare;
@@ -240,4 +211,3 @@ int main(void) {
 
     return 0;
 }
-

@@ -1,16 +1,18 @@
-#include <stdlib.h> /* malloc(), free() */
+#include <stdlib.h>
 #include <assert.h>
 #include "GameList.h"
 #include "datatypes.h"
-#include "Date.h"   /* compareDates() */
+#include "Date.h"
 #define ASSERT assert
+
 /*
   Create a new list -- simply create the header and the footer.
  */
+
 GameList* GameListNew(void) {
     GameList* list = (GameList*)malloc(sizeof(GameList));
     if ( list ) {
-        list->game = nullGame;
+        list->game = NULL_GAME;
         list->next = NULL;
         list->prev = NULL;
     }
@@ -18,7 +20,7 @@ GameList* GameListNew(void) {
     list->next = (GameList*)malloc(sizeof(GameList));
 
     if (list->next) {
-        list->next->game = nullGame;
+        list->next->game = NULL_GAME;
         list->next->game.date = DATEMAX;
         list->next->prev = list;
         list->next->next = NULL;

@@ -1,4 +1,4 @@
-#include <stdio.h> /* printf() */
+#include <stdio.h>
 #include "Date.h"
 
 /**

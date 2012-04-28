@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include "string_functions.h"
 #include "datatypes.h"
 #include "Actions.h"

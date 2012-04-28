@@ -1,4 +1,5 @@
 #include "datatypes.h"
+#include "GameList.h"
 #include <stdlib.h>
 
 Team*      Teams;        /* All teams, ordered alphabetically */

@@ -1,6 +1,11 @@
-#include "string.h"
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+#include "string_functions.h"
 #include "datatypes.h"
 #include "GameList.h"
+
+#define ASSERT assert
 
 Team* getTeamFromInput(const char* input) {
     int iMax=NUM_TEAMS-1, iMin=0, iMed, compare;

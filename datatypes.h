@@ -1,5 +1,6 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H 1
+#include <stdlib.h>
 #include "fixsizedtypes.h"
 #include "Date.h"
 

@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "string.h"
+#include "string_functions.h"
 #include "datatypes.h"
 #include "Actions.h"
 #include "GameList.h"
 
 int main(void) {
-    char cmd[NAME_SIZE];
+    char cmd[NAME_SIZE+1];
     /*size_t cmdlen; NOT YET USED */
 
     /******************************** TESTING STUFF *******************************/
@@ -64,7 +64,7 @@ int main(void) {
 
     while(true) {
         printf("What to do? "); fflush(stdout);
-        while ( !readString(cmd, MAX_CMD) ) ;
+        while ( !readString(cmd, NAME_SIZE) ) ;
 
         /** QUIT **/
         if ( ! strcmp(cmd, "QUIT") )

@@ -1,6 +1,6 @@
 #ifndef DATE_H
 #define DATE_H 1
-#include "fixsizedtypes.h"
+#include "fixsizedtypes.h" /* uint8_t, bool */
 
 typedef struct _Date {
     uint8_t day, month;

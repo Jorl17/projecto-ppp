@@ -1,16 +1,16 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H 1
 #include <stdlib.h>
-#include "fixsizedtypes.h"
-#include "Date.h"
 
 #define OUTCOME_HOMEWIN 1
 #define OUTCOME_DRAW    2
 #define OUTCOME_AWAYWIN 3
 #define NAME_SIZE 30
 
-typedef struct _GameList GameList;
+
+/** Forward declare a couple of things **/
 typedef struct _Team     Team;
+typedef struct _GameList GameList;
 typedef struct _Game     Game;
 
 struct _Team {

@@ -1,6 +1,7 @@
 #ifndef GAMELIST_H
 #define GAMELIST_H 1
-#include "datatypes.h"
+#include "datatypes.h" /* Team*, GameList*, Game* (both forward declared) */
+#include "Date.h"      /* Date */
 
 struct _Game {
     uint8_t outcome;

@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdio.h> /* printf(), fflush() */
 #include "Date.h"
 
 /**
@@ -32,7 +32,7 @@ void printDate(Date d, bool longFormat) {
     if (longFormat)
         return ; /* FIXME: Do long format printing here... */
     else
-        printf("%2d/%2d/%4d", d.day, d.month, d.year);
+        printf("%2d/%2d/%4d", d.day, d.month, d.year);fflush(stdout);
 }
 
 Date DATEMAX = {(uint8_t)-1, (uint8_t)-1, (unsigned int)-1};

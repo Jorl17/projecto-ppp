@@ -1,10 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "string_functions.h"
-#include "datatypes.h"
-#include "Actions.h"
-#include "GameList.h"
+#include <stdio.h>            /* printf(), fflush() */
+#include <stdlib.h>           /* malloc(), free() */
+#include <string.h>           /* strcmp(), strncmp() */
+#include "string_functions.h" /* readString() */
+#include "datatypes.h"        /* Team* */
+#include "Actions.h"          /* All actions */
+#include "GameList.h"         /* GameList, Game */
 
 int main(void) {
     char cmd[NAME_SIZE+1];

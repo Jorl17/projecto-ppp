@@ -1,6 +1,7 @@
 #ifndef SAVELOAD_H
-#define SAVELOAD_H
-#include "datatypes.h"
+#define SAVELOAD_H 1
+#include "datatypes.h"     /* Game* */
+#include "fixsizedtypes.h" /* bool, uint8_t */
 
 bool readFiles(void);
 

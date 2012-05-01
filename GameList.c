@@ -1,8 +1,7 @@
-#include <stdlib.h>
+#include <stdlib.h>     /* malloc(), free() */
 #include <assert.h>
 #include "GameList.h"
-#include "datatypes.h"
-#include "Date.h"
+#include "Date.h"       /* compareDates() */
 #define ASSERT assert
 
 /*

@@ -100,7 +100,6 @@ void NewGame(const char* input) {
     Date date;
     size_t read;
     char str[NAME_SIZE];
-    printf("NewGame() called with '%s'\n", input);
     if (*input) {
         /* User probably passed in the data through the commandline */
         /* FIXME */

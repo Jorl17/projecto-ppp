@@ -1,5 +1,6 @@
 #include <stdlib.h>     /* malloc(), free() */
 #include <assert.h>
+#include "datatypes.h"
 #include "GameList.h"
 #include "Date.h"       /* compareDates() */
 #define ASSERT assert
@@ -12,6 +13,7 @@ GameList* GameListNew(void) {
     GameList* list = (GameList*)malloc(sizeof(GameList));
     if ( list ) {
         list->game = NULL_GAME;
+        list->game.date = DATEMIN;
         list->next = NULL;
         list->prev = NULL;
     }
@@ -93,4 +95,25 @@ void GameListDelGame(GameList* list) {
     list->prev->next = list->next;
     list->next->prev = list->prev;
     free(list);
+}
+
+GameList* GameListIterateNext(GameList* list) {
+    ASSERT(list);
+    return list->next;
+}
+
+/*
+  Gets the next element in the list.
+ */
+GameList* GameListIteratePrev(GameList* list) {
+    ASSERT(list);
+    return list->prev;
+}
+
+bool GameListIsHeader(GameList* list) {
+    return list->prev==NULL;
+}
+
+bool GameListIsFooter(GameList* list) {
+    return list->next == NULL;
 }

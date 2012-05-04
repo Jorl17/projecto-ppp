@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "string_functions.h" /* isStrNumber()*/
 #include "datatypes.h"
+#include "Team.h"
 #include "GameList.h"
 
 #define ASSERT assert

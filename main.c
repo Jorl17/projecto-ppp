@@ -5,6 +5,7 @@
 #include "datatypes.h"        /* Team* */
 #include "Actions.h"          /* All actions */
 #include "GameList.h"         /* GameList, Game */
+#include "Team.h"
 
 int main(void) {
     char cmd[NAME_SIZE+1];

@@ -1,10 +1,11 @@
 #include <stdio.h>    /* printf() */
 #include <string.h>   /* strcmp() */
 #include <assert.h>
-#include "string_functions.h" /* isStrNumber()*/
+#include "string_functions.h" /* isStrNumber(),readString() */
 #include "datatypes.h"
 #include "Team.h"
 #include "GameList.h"
+#include "Date.h"
 
 #define ASSERT assert
 
@@ -47,9 +48,10 @@ void printGame(unsigned int id, Game* game) {
 }
 
 void ShowGames(void) {
-    ASSERT(LastGameList);
-    GameList* local = LastGameList->next;
+    GameList* local;
     size_t c=0;
+    ASSERT(LastGameList);
+    local = LastGameList->next;
     while(local->next) {
         printGame(c++, &(local->game));
         local = local->next;
@@ -92,6 +94,47 @@ void ListTeams(void) {
     printf("------------------------------------------------------------------------------\n");
 }
 
-void NewGame(const char* input) {printf("NewGame() called with '%s'\n", input);}
+void NewGame(const char* input) {
+    Team* homeTeam;
+    Team* awayTeam;
+    Date date;
+    size_t read;
+    char str[NAME_SIZE];
+    printf("NewGame() called with '%s'\n", input);
+    if (*input) {
+        /* User probably passed in the data through the commandline */
+        /* FIXME */
+    } else {
+        date=getDateFromUser("Data do jogo?");
+        if (!compareDates(date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
+            return ;
+
+        printf("Equipa da Casa? "); fflush(stdout);
+        read = readString(str, NAME_SIZE);
+        if (!read)
+            return ;
+
+        else if ( ! (homeTeam = getTeamFromInput(str)) )
+            return ;
+
+        printf("Equipa Visitante? "); fflush(stdout);
+        read = readString(str, NAME_SIZE);
+        if (!read)
+            return ;
+
+        else if ( ! (awayTeam = getTeamFromInput(str)) )
+            return ;
+
+        if (awayTeam==homeTeam)
+            return ;
+
+    }
+
+    /* FIXME: Effectively add the team now */
+    printf("Jogo: %s vs %s, no dia ", homeTeam->name, awayTeam->name);
+    printDate(date, false);
+    printf("\n");
+
+}
 void DeleteGame(const char* input) {printf("DeleteGame() called with '%s'\n", input);}
 void ShowScoreboard(void) {}

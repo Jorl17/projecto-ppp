@@ -8,7 +8,7 @@
 #include "Team.h"
 
 int main(void) {
-    char cmd[NAME_SIZE+1];
+    char cmd[NAME_SIZE+1]={0};
     /*size_t cmdlen; NOT YET USED */
 
     /******************************** TESTING STUFF *******************************/
@@ -63,8 +63,9 @@ int main(void) {
     /******************************* !TESTING STUFF *******************************/
 
     while(true) {
-        printf("What to do? "); fflush(stdout);
-        while ( !readString(cmd, NAME_SIZE) ) ;
+        do {
+            printf("What to do? "); fflush(stdout);
+        } while ( !readString(cmd, NAME_SIZE) );
 
         /** QUIT **/
         if ( ! strcmp(cmd, "QUIT") )

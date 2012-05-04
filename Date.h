@@ -10,5 +10,7 @@ typedef struct _Date {
 int compareDates(Date d1, Date d2);
 void printDate(Date d, bool longFormat);
 extern Date DATEMAX, DATEMIN;
+Date getDateFromUser(const char* msg);
+bool isValidDate(Date d);
 
 #endif /* DATE_H */

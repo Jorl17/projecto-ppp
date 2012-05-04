@@ -31,4 +31,6 @@ int TeamGetPoints(Team* team) {
             }
         }
     }
+
+    return team->cachedPoints;
 }

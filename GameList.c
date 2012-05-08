@@ -70,7 +70,7 @@ static GameList* GameListSearch(GameList* list, const Game* key) {
     return list;
 }
 
-void GameListAddGame(GameList* list, Game g) {
+GameList* GameListAddGame(GameList* list, Game g) {
     GameList* node;
     GameList* nodeToBeAfterNew;
     ASSERT(list);
@@ -88,13 +88,16 @@ void GameListAddGame(GameList* list, Game g) {
     node->prev = nodeToBeAfterNew->prev;
     nodeToBeAfterNew->prev = node;
 
+    return node;
+
 }
 
-void GameListDelGame(GameList* list) {
-    ASSERT(list);
-    list->prev->next = list->next;
-    list->next->prev = list->prev;
-    free(list);
+void GameListDelGame(GameList* game) {
+    ASSERT(game);
+    game->prev->next = game->next;
+    game->next->prev = game->prev;
+    free(game);
+
 }
 
 GameList* GameListIterateNext(GameList* list) {

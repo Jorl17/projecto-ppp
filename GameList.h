@@ -22,8 +22,8 @@ struct _GameList {
 
 GameList* GameListNew(void);
 void GameListDelete(GameList* list);
-void GameListAddGame(GameList* list, Game g);
-void GameListDelGame(GameList* list);
+GameList* GameListAddGame(GameList* list, Game g);
+void GameListDelGame(GameList* game);
 void GameListDelete(GameList* list);
 GameList* GameListIterateNext(GameList* list);
 GameList* GameListIteratePrev(GameList* list);

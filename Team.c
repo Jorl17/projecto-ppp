@@ -34,3 +34,10 @@ int TeamGetPoints(Team* team) {
 
     return team->cachedPoints;
 }
+
+void TeamUpdateGameListCache(Team* team, Game* game) {
+    if (!team->gameList)
+        return ;
+
+    // TODO
+}

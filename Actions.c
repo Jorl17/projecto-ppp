@@ -37,14 +37,14 @@ void printGame(unsigned int id, Game* game) {
     ASSERT(game);
     printf("%u. ", id);
     printDate(game->date, false);
-    printf(": %s -- %s:\t", game->homeTeam->name, game->awayTeam->name);
+    printf(": %s vs %s:\t", game->homeTeam->name, game->awayTeam->name);
 
     if (game->outcome == OUTCOME_HOMEWIN)
-        printf("Home Win\n");
+        printf("Vitória da Casa\n");
     else if (game->outcome == OUTCOME_AWAYWIN)
-        printf("Away Win\n");
+        printf("Empate\n");
     else
-        printf("Draw\n");
+        printf("Derrota da Casa\n");
 }
 
 void ShowGames(void) {
@@ -95,17 +95,15 @@ void ListTeams(void) {
 }
 
 void NewGame(const char* input) {
-    Team* homeTeam;
-    Team* awayTeam;
-    Date date;
+    Game game;
     size_t read;
     char str[NAME_SIZE];
     if (*input) {
         /* User probably passed in the data through the commandline */
         /* FIXME */
     } else {
-        date=getDateFromUser("Data do jogo?");
-        if (!compareDates(date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
+        game.date=getDateFromUser("Data do jogo?");
+        if (!compareDates(game.date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
             return ;
 
         printf("Equipa da Casa? "); fflush(stdout);
@@ -113,7 +111,7 @@ void NewGame(const char* input) {
         if (!read)
             return ;
 
-        else if ( ! (homeTeam = getTeamFromInput(str)) )
+        else if ( ! (game.homeTeam = getTeamFromInput(str)) )
             return ;
 
         printf("Equipa Visitante? "); fflush(stdout);
@@ -121,18 +119,31 @@ void NewGame(const char* input) {
         if (!read)
             return ;
 
-        else if ( ! (awayTeam = getTeamFromInput(str)) )
+        else if ( ! (game.awayTeam = getTeamFromInput(str)) )
             return ;
 
-        if (awayTeam==homeTeam)
+        if (game.awayTeam==game.homeTeam)
+            return ;
+
+        printf("Resultado (V, E, D)? "); fflush(stdout);
+        read = readString(str, 2);
+        if (*str=='V' || *str == 'v')
+            game.outcome = OUTCOME_HOMEWIN;
+        else if (*str=='E' || *str == 'e')
+            game.outcome = OUTCOME_DRAW;
+        else if (*str=='D' || *str == 'd')
+            game.outcome = OUTCOME_AWAYWIN;
+        else
             return ;
 
     }
 
-    /* FIXME: Effectively add the team now */
-    printf("Jogo: %s vs %s, no dia ", homeTeam->name, awayTeam->name);
-    printDate(date, false);
-    printf("\n");
+    printGame(0, &game); /* Just here to test. Dummy ID */
+
+    GameListAddGame(Games, game);
+    /* create and call functions here:
+      TeamUpdateGameListCache(), which will update the game list cache if needed.
+      */
 
 }
 void DeleteGame(const char* input) {printf("DeleteGame() called with '%s'\n", input);}

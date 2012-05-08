@@ -73,7 +73,7 @@ int main(void) {
         /** SHOW TEAMS and SHOW <TEAM> */
         else if ( !strncmp(cmd, "SHOW ", 5) ) {
             if ( !strcmp(&cmd[5], "TEAMS") ) { /* 5 = strlen("SHOW "); */
-                LastGameList = Games;
+                LastGameList = Games; /* FIXME: This will be NULL, because, in reality, LastGameList will be a list of pointers to games, and not simply another list of games */
                 ShowGames();
             } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
                 LastGameList = selectedTeam->gameList;

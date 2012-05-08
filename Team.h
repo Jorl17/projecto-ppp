@@ -1,11 +1,10 @@
 #ifndef TEAM_H
 #define TEAM_H 1
-#include "Team.h"
 #include "GameList.h"
 struct _Team {
     char name[NAME_SIZE];
     char location[NAME_SIZE];
-    int cachedPoints; /* -1 indicates not cached yet */
+    int points; /* -1 indicates not cached yet */
     GameList* gameList;
 };
 

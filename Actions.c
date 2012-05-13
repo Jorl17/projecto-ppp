@@ -87,7 +87,7 @@ void ListTeams(void) {
             printf(" ");
 
         /** Print points right aligned with 1 space to the left and to the right **/
-        printf("| %6d ", Teams[i].cachedPoints); /* Fixme, hacked in for testing. We need a TeamGetPoints() that sets up cache and all that */
+        printf("| %6d ", Teams[i].points); /* Fixme, hacked in for testing. We need a TeamGetPoints() that sets up cache and all that */
         printf("|\n");
     }
 

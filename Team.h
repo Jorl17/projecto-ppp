@@ -4,6 +4,7 @@
 struct _Team {
     char name[NAME_SIZE];
     char location[NAME_SIZE];
+    int points; // -1 indicates not cached yet
     GameList* gameList; // FIXME: What we want is a list of game pointers...
 };
 

@@ -82,7 +82,7 @@ int main(void) {
                 LastGameList = selectedTeam->gameList;
                 printf("TEAM: %s\n", selectedTeam->name); // FIXME: TESTING
                 ShowGames();
-            } els
+            } else
                 goto wrong_command; // FIXME: 'EVIL' GOTO!
         }
         else if ( !strcmp(cmd, "LIST") ) {

@@ -1,34 +1,36 @@
-#include <stdio.h>            /* printf(), fflush() */
-#include <stdlib.h>           /* malloc(), free() */
-#include <string.h>           /* strcmp(), strncmp() */
-#include "string_functions.h" /* readString() */
-#include "datatypes.h"        /* Team* */
-#include "Actions.h"          /* All actions */
-#include "GameList.h"         /* GameList, Game */
+#include <stdio.h>            // printf(), fflush()
+#include <stdlib.h>           //  malloc(), free()
+#include <string.h>           //  strcmp(), strncmp()
+#include "string_functions.h" //  readString()
+#include "datatypes.h"        //  Team*
+#include "Actions.h"          //  All actions
+#include "GameList.h"         //  GameList, Game
 #include "Team.h"
 
 int main(void) {
     char cmd[NAME_SIZE+1]={0};
-    /*size_t cmdlen; NOT YET USED */
+    // size_t cmdlen; NOT YET USED
 
     /******************************** TESTING STUFF *******************************/
     Team* selectedTeam;
     Teams = (Team*)malloc(3*sizeof(Team));
     strcpy(Teams[0].name, "AB Porto");
     strcpy(Teams[0].location, "Porto, Portugal");
-    Teams[0].cachedPoints = 64;
+    Teams[0].points = 64;
 
     strcpy(Teams[1].name, "BE Benfica");
     strcpy(Teams[1].location, "Lisboa, Portugal");
-    Teams[1].cachedPoints = 32;
+    Teams[1].points = 32;
 
     strcpy(Teams[2].name, "CD Braga");
     strcpy(Teams[2].location, "Braga, Portugal");
-    Teams[2].cachedPoints = 63;
+    Teams[2].points = 63;
     NUM_TEAMS = 3;
     Games = GameListNew();
-    /** This stuff triggers ANSI C pedantic warnings, but it's in the testing
-      part, so it's ok.**/
+
+
+    /* Triggers ANSI C pedantic warnings, but it's in the testing
+      part, so it's ok. */
     Game game1 = { /*.outcome=*/     OUTCOME_HOMEWIN,
                       /*.date=*/        {5,5,1993},
                    /*.homeTeam=*/    &Teams[0],
@@ -49,6 +51,7 @@ int main(void) {
                       /*.date=*/        {2,5,1993},
                    /*.homeTeam=*/    &Teams[0],
                    /*.awayTeam=*/    &Teams[1]};
+
     LastGameList = Games;
     GameListAddGame(Games, game1);
     ShowGames(); printf("\n");
@@ -60,45 +63,40 @@ int main(void) {
     ShowGames();printf("\n");
     GameListAddGame(Games, game5);
     ShowGames();printf("\n");
-    /******************************* !TESTING STUFF *******************************/
+    /**************************************************************************/
 
     while(true) {
         do {
             printf("What to do? "); fflush(stdout);
         } while ( !readString(cmd, NAME_SIZE) );
 
-        /** QUIT **/
+        // QUIT
         if ( ! strcmp(cmd, "QUIT") )
             break;
-        /** SHOW TEAMS and SHOW <TEAM> */
+        // SHOW TEAMS and SHOW <TEAM>
         else if ( !strncmp(cmd, "SHOW ", 5) ) {
-            if ( !strcmp(&cmd[5], "TEAMS") ) { /* 5 = strlen("SHOW "); */
+            if ( !strcmp(&cmd[5], "TEAMS") ) { // 5 = strlen("SHOW ");
                 LastGameList = Games; /* FIXME: This will be NULL, because, in reality, LastGameList will be a list of pointers to games, and not simply another list of games */
                 ShowGames();
             } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
                 LastGameList = selectedTeam->gameList;
-                printf("TEAM: %s\n", selectedTeam->name); /* FIXME: TESTING */
+                printf("TEAM: %s\n", selectedTeam->name); // FIXME: TESTING
                 ShowGames();
-            } else
-                goto wrong_command; /*FIXME: 'EVIL' GOTO!*/
+            } els
+                goto wrong_command; // FIXME: 'EVIL' GOTO!
         }
-        /** LIST **/
         else if ( !strcmp(cmd, "LIST") ) {
             ListTeams();
         }
-        /** ADD GAME / CREATE / NEW / ADD ? FIXME, only one (or some) of these.**/
         else if ( !strncmp(cmd, "ADD", 3) ) {
-            NewGame(&cmd[4]); /* 4 = strlen("ADD ") */
+            NewGame(&cmd[4]); // 4 = strlen("ADD ")
         }
-        /** DEL GAME. FIXME: Some other name? */
         else if ( !strcmp(cmd, "DEL") ) {
-            DeleteGame(&cmd[3]); /* 3 = strlen("DEL") */
+            DeleteGame(&cmd[3]); // 3 = strlen("DEL")
         }
-        /** SCORE / SCOREBOARD. FIXME: Some other name? **/
         else if ( !strcmp(cmd, "SCORE") ) {
             ShowScoreboard();
         }
-        /** Unrecognized command **/
         else {
             wrong_command:
             printf("Unrecognized command.\n");
@@ -106,10 +104,10 @@ int main(void) {
 
     }
 
-    /******************************** TESTING STUFF *******************************/
+    /******************************** TESTING *******************************/
     GameListDelete(Games);
     free(Teams);
-    /******************************* !TESTING STUFF *******************************/
+    /************************************************************************/
 
     return 0;
 }

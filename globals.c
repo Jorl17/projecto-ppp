@@ -2,8 +2,8 @@
 #include "GameList.h"     // GameList*
 #include <stdlib.h>       // size_t
 
+int     NUM_TEAMS;
 Team*      Teams;        // All teams, ordered alphabetically
-size_t     NUM_TEAMS;
 GameList*  Games;        // Has all games ordered by date
 GameList*  LastGameList; // Points to the last listed game list.
 

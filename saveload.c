@@ -7,23 +7,27 @@
 
 // Read
 void ReadFiles() {
-	NUM_TEAMS = 50; // I think this should be a #define contant, instead of the size_t wackamole
-
 	ReadTeams();
 	ReadGames();
 };
 
 
 void ReadTeams() {
-	FILE *file = fopen ('WHERE_IS_THE_FILE_SAVED?', 'r');
-	char line[NAME_SIZE * 2];
-	int i = 0;
-	
-	while (fgets(line,1, sizeof(line), file) && i < NUM_TEAMS) {
-		strcpy(Teams[i].name, line);
-		strcpy(Team[i].location, line + NAME_SIZE);
-		i++;
+	FILE *file = fopen ("WHERE_IS_THE_FILE_SAVED?", "r");
+  char line[NAME_SIZE * 2 + 2];
+  
+  Teams = malloc(sizeof(Team));
+  NUM_TEAMS = 0;
+  
+	while (fgets(line, sizeof(line), file)) {
+    realloc(Teams, sizeof(Team) * NUM_TEAMS);
+		NUM_TEAMS++;
+    
+		strcpy(Teams[NUM_TEAMS].name, line);
+		strcpy(Teams[NUM_TEAMS].location, line + NAME_SIZE + 1);
 	};
+  
+  
 };
 
 void ReadGames() {

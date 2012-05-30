@@ -1,7 +1,8 @@
+#include <stdlib.h>
 #include <stdio.h> /* printf(), fflush() */
 #include <string.h> /* strtok() */
 #include "Date.h"
-#include "string_functions.h" /* readString() */
+#include "string.h" /* readString() */
 
 /**
   Compare 2 dates. Returns:

@@ -1,7 +1,7 @@
 #include <stdio.h>    /* printf() */
 #include <string.h>   /* strcmp() */
 #include <assert.h>
-#include "string_functions.h" /* isStrNumber(),readString() */
+#include "string.h" /* isStrNumber(),readString() */
 #include "datatypes.h"
 #include "Team.h"
 #include "GameList.h"
@@ -87,7 +87,7 @@ void ListTeams(void) {
             printf(" ");
 
         /** Print points right aligned with 1 space to the left and to the right **/
-        printf("| %6d ", Teams[i].cachedPoints); /* Fixme, hacked in for testing. We need a TeamGetPoints() that sets up cache and all that */
+        printf("| %6d ", Teams[i].points); /* Fixme, hacked in for testing. We need a TeamGetPoints() that sets up cache and all that */
         printf("|\n");
     }
 

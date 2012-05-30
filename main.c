@@ -1,7 +1,7 @@
 #include <stdio.h>            // printf(), fflush()
 #include <stdlib.h>           //  malloc(), free()
 #include <string.h>           //  strcmp(), strncmp()
-#include "string_functions.h" //  readString()
+#include "string.h" //  readString()
 #include "datatypes.h"        //  Team*
 #include "Actions.h"          //  All actions
 #include "GameList.h"         //  GameList, Game
@@ -82,7 +82,7 @@ int main(void) {
                 LastGameList = selectedTeam->gameList;
                 printf("TEAM: %s\n", selectedTeam->name); // FIXME: TESTING
                 ShowGames();
-            } els
+            } else
                 goto wrong_command; // FIXME: 'EVIL' GOTO!
         }
         else if ( !strcmp(cmd, "LIST") ) {

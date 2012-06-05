@@ -1,7 +1,7 @@
 #include <stdio.h>    /* printf() */
 #include <string.h>   /* strcmp() */
 #include <assert.h>
-#include "string_functions.h" /* isStrNumber(),readString() */
+#include "string.h" /* isStrNumber(),readString() */
 #include "datatypes.h"
 #include "Team.h"
 #include "GameList.h"

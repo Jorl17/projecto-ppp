@@ -1,7 +1,7 @@
 #include <stdio.h>            // printf(), fflush()
 #include <stdlib.h>           //  malloc(), free()
 #include <string.h>           //  strcmp(), strncmp()
-#include "string_functions.h" //  readString()
+#include "string.h" //  readString()
 #include "datatypes.h"        //  Team*
 #include "Actions.h"          //  All actions
 #include "GameList.h"         //  GameList, Game

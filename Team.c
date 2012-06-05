@@ -33,6 +33,7 @@ int TeamGetPoints(Team* team) {
     }
 
     return team->points;
+<<<<<<< HEAD
 }
 
 void TeamUpdateGameListCache(Team* team, Game* game) {
@@ -40,4 +41,6 @@ void TeamUpdateGameListCache(Team* team, Game* game) {
         return ;
 
     // TODO
+=======
+>>>>>>> Jaliborc
 }

@@ -11,6 +11,6 @@ struct _Team {
 int TeamGetPoints(Team* team);
 
 extern Team*      Teams;        /* All teams, ordered alphabetically */
-extern size_t     NUM_TEAMS;
+extern int     NUM_TEAMS;
 
 #endif

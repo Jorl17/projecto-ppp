@@ -7,6 +7,7 @@
 #define OUTCOME_HOMEWIN 1
 #define OUTCOME_DRAW    2
 #define OUTCOME_AWAYWIN 3
+
 struct _Game {
     uint8_t outcome;
     Date date;
@@ -33,5 +34,6 @@ bool GameListIsFooter(GameList* list);
 
 extern GameList*  Games;        /* Has all games ordered by date */
 extern GameList*  LastGameList; /* Points to the last listed game list. */
+extern GameList NULL_GAME_LIST;
 extern Game NULL_GAME;
 #endif

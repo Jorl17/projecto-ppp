@@ -2,8 +2,9 @@
 #define GAMELIST_H 1
 #include "fixsizedtypes.h" /* bool */
 #include "datatypes.h" /* GameList*, Game* (both forward declared) */
-#include "Team.h"      /* Team* */
 #include "Date.h"      /* Date */
+#include "list_t.h"    /* list_t */
+#include "Team.h"      /* Team* */
 #define OUTCOME_HOMEWIN 1
 #define OUTCOME_DRAW    2
 #define OUTCOME_AWAYWIN 3
@@ -15,25 +16,14 @@ struct _Game {
     Team* awayTeam;
 };
 
-struct _GameList {
-    Game game;
-    GameList* next;
-    GameList* prev;
-};
+int compareDatesAux(void* d1, void* d2);
 
-GameList* GameListNew(void);
-void GameListDelete(GameList* list);
-GameList* GameListAddGame(GameList* list, Game g);
-void GameListDelGame(GameList* game);
-void GameListDelete(GameList* list);
-GameList* GameListIterateNext(GameList* list);
-GameList* GameListIteratePrev(GameList* list);
-bool GameListIsHeader(GameList* list);
-bool GameListIsFooter(GameList* list);
+list_t* GameListAddGame(list_t* list, Game g);
 
 
-extern GameList*  Games;        /* Has all games ordered by date */
-extern GameList*  LastGameList; /* Points to the last listed game list. */
-extern GameList NULL_GAME_LIST;
+extern list_t*  Games;        /* Has all games ordered by date */
+extern list_t*  LastGameList; /* Points to the last listed game list. FIXME: it isn't a GameList*/
 extern Game NULL_GAME;
+
+#define GAMELIST_GAME(list) LIST_DATA(list, Game)
 #endif

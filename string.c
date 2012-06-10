@@ -4,6 +4,15 @@
 #include <string.h>
 #include "string.h"
 
+static int flushInputBuffer(void) {
+    char ch;
+    int n=0;
+
+    while ((ch = getchar()) != '\n' && ch != EOF) n++;
+
+    return n;
+}
+
 /*
  Reads a string from standard input. Returns the length of the string or 0
  if there was an error.
@@ -14,7 +23,13 @@ size_t readString(char* str, size_t maxlen) {
     return 0;
   
   len = strlen(str);
-  str[len-1]='\0';
+  if (len == maxlen-1) {
+      flushInputBuffer();
+  }
+  else if (str[len-1]=='\n'){
+      str[len-1]='\0';
+      /* Clean buffer */
+  }
   return len;
 }
 

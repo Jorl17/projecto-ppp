@@ -16,17 +16,21 @@ int main(void) {
     Teams = (Team*)malloc(3*sizeof(Team));
     strcpy(Teams[0].name, "AB Porto");
     strcpy(Teams[0].location, "Porto, Portugal");
-    Teams[0].points = 64;
+    Teams[0].points = -1;
+    Teams[0].gameList = NULL;
 
     strcpy(Teams[1].name, "BE Benfica");
     strcpy(Teams[1].location, "Lisboa, Portugal");
-    Teams[1].points = 32;
+    Teams[1].points = -1;
+    Teams[1].gameList = NULL;
 
     strcpy(Teams[2].name, "CD Braga");
     strcpy(Teams[2].location, "Braga, Portugal");
-    Teams[2].points = 63;
+    Teams[2].points = -1;
+    Teams[2].gameList = NULL;
+
     NUM_TEAMS = 3;
-    Games = GameListNew();
+    Games = ListNew();
 
 
     /* Triggers ANSI C pedantic warnings, but it's in the testing
@@ -52,7 +56,7 @@ int main(void) {
                    /*.homeTeam=*/    &Teams[0],
                    /*.awayTeam=*/    &Teams[1]};
 
-    LastGameList = Games;
+    LastGameList = NULL;
     GameListAddGame(Games, game1);
     ShowGames(); printf("\n");
     GameListAddGame(Games, game2);
@@ -76,9 +80,10 @@ int main(void) {
         // SHOW TEAMS and SHOW <TEAM>
         else if ( !strncmp(cmd, "SHOW ", 5) ) {
             if ( !strcmp(&cmd[5], "TEAMS") ) { // 5 = strlen("SHOW ");
-                LastGameList = Games; /* FIXME: This will be NULL, because, in reality, LastGameList will be a list of pointers to games, and not simply another list of games */
+                LastGameList = NULL;
                 ShowGames();
             } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
+                TeamUpdateGameListCache(selectedTeam, NULL);
                 LastGameList = selectedTeam->gameList;
                 printf("TEAM: %s\n", selectedTeam->name); // FIXME: TESTING
                 ShowGames();
@@ -105,7 +110,7 @@ int main(void) {
     }
 
     /******************************** TESTING *******************************/
-    GameListDelete(Games);
+    ListDelete(Games);
     free(Teams);
     /************************************************************************/
 

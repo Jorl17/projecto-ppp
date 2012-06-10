@@ -42,19 +42,28 @@ void printGame(unsigned int id, Game* game) {
     if (game->outcome == OUTCOME_HOMEWIN)
         printf("Vitória da Casa\n");
     else if (game->outcome == OUTCOME_AWAYWIN)
-        printf("Empate\n");
-    else
         printf("Derrota da Casa\n");
+    else
+        printf("Empate\n");
 }
 
 void ShowGames(void) {
-    GameList* local;
+    list_t* local;
     size_t c=0;
-    ASSERT(LastGameList);
-    local = LastGameList->next;
-    while(local->next) {
-        printGame(c++, &(local->game));
-        local = local->next;
+    if (LastGameList == NULL) {
+        local = Games->next;
+        while(local->next) {
+            printGame(c++, local->data);
+            local = local->next;
+        }
+    } else {
+        if (LastGameList->next) {
+            local = LastGameList->next;
+            while(local->next) {
+                printGame(c++, ((Game*)((list_t*)local->data)->data));
+                local = local->next;
+            }
+        }
     }
 }
 
@@ -87,7 +96,7 @@ void ListTeams(void) {
             printf(" ");
 
         /** Print points right aligned with 1 space to the left and to the right **/
-        printf("| %6d ", Teams[i].points); /* Fixme, hacked in for testing. We need a TeamGetPoints() that sets up cache and all that */
+        printf("| %6d ", TeamGetPoints(&Teams[i]));
         printf("|\n");
     }
 
@@ -98,6 +107,7 @@ void NewGame(const char* input) {
     Game game;
     size_t read;
     char str[NAME_SIZE];
+    list_t* tmp;
     if (*input) {
         /* User probably passed in the data through the commandline */
         /* FIXME */
@@ -138,12 +148,9 @@ void NewGame(const char* input) {
 
     }
 
-    printGame(0, &game); /* Just here to test. Dummy ID */
+    printGame(0, &game); /* Just here to test. Dummy ID FIXME*/
 
-    GameListAddGame(Games, game);
-    /* create and call functions here:
-      TeamUpdateGameListCache(), which will update the game list cache if needed.
-      */
+    tmp=GameListAddGame(Games, game);
 
 }
 void DeleteGame(const char* input) {printf("DeleteGame() called with '%s'\n", input);}

@@ -6,7 +6,7 @@
 int TeamGetPoints(Team* team) {
     ASSERT(team);
 
-    // If there isn't anything cached yet.
+    /* If there isn't anything cached yet. */
     if (team->points==-1) {
         if (!team->gameList) {
             team->points=0;
@@ -23,13 +23,13 @@ void TeamPointsUpdateWithGame(Team* team, Game* game) {
     ASSERT(game);
 
     if (game->homeTeam == team) {
-        // We play home
+        /* We play home */
         if ( game->outcome == OUTCOME_HOMEWIN)
             team->points += 3;
         else if (game->outcome == OUTCOME_DRAW)
             team->points += 1;
     } else {
-        // We play away
+        /* We play away */
         if ( game->outcome == OUTCOME_AWAYWIN)
             team->points += 3;
         else if (game->outcome == OUTCOME_DRAW)
@@ -39,7 +39,6 @@ void TeamPointsUpdateWithGame(Team* team, Game* game) {
 
 void TeamUpdateGameListCache(Team* team, list_t* gameNode) {
     ASSERT(team);
-    //ASSERT(gameNode); This can be NULL, in case we just want to create it once.
 
     if (!team->gameList) {
         list_t* iter = Games;

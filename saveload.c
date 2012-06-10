@@ -5,7 +5,7 @@
 #include "saveload.h"
 
 
-// Read
+/* Read */
 void ReadFiles() {
 	ReadTeams();
 	ReadGames();
@@ -58,7 +58,7 @@ void ReadGames() {
 };
 
 
-// Write
+/* Write */
 void UpdateGames(int start) {
 	
 };

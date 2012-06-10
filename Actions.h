@@ -1,4 +1,4 @@
-#include "datatypes.h" // Team*, Game* (last one is forward declared)
+#include "datatypes.h" /* Team*, Game* (last one is forward declared) */
 
 Team* getTeamFromInput(const char*);
 void printGame(unsigned int, Game*);

@@ -12,10 +12,10 @@ list_t* TeamGameListAdd(list_t* list, list_t* g) {
     return ListAdd(list, (void*)g, &compareDatesFromNodeAux);
 }
 
-////
-// This function is specific because list_t does not actually create content.
-// FIXME: NOT USED YET!!!
-//
+/****
+** This function is specific because list_t does not actually create content.
+** FIXME: NOT USED YET!!!
+*/
 void TeamGameListDel(list_t* l) {
     ASSERT(l);
     l->prev->next = l->next;

@@ -4,7 +4,7 @@
 struct _Team {
     char name[NAME_SIZE];
     char location[NAME_SIZE];
-    int points; // -1 indicates not cached yet
+    int points; /* -1 indicates not cached yet */
     list_t* gameList;
 };
 

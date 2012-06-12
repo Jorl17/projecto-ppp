@@ -5,7 +5,7 @@
 #include "list_t.h"
 #include "Team.h"
 #include "TeamGameList.h"
-
+#include "TeamScoreBoardList.h"
 int compareDatesAux(void* d1, void* d2) {
     return compareDates(((Game*)d1)->date, ((Game*)d2)->date);
 }
@@ -20,5 +20,7 @@ list_t* GameListAddGame(list_t* list, Game game) {
     if (g->awayTeam->gameList)
         TeamUpdateGameListCache(g->awayTeam, tmp);
 
+    if(ScoreboardList)
+        ScoreboardList = ScoreboardListUpdate(ScoreboardList, g);
     return tmp;
 }

@@ -6,6 +6,7 @@
 #include "Team.h"
 #include "GameList.h"
 #include "Date.h"
+#include "TeamScoreBoardList.h"
 
 #define ASSERT assert
 
@@ -67,37 +68,42 @@ void ShowGames(void) {
     }
 }
 
+void TablePrintTeam(size_t i, Team* t) {
+    size_t j, len;
+    printf("|%-4lu", i);
+    /** Print Name centered **/
+    printf("|");
+    len = strlen(t->name);
+    for (j = 1; j <= (30-len)/2; j++)
+        printf(" ");
+    printf("%s", t->name);
+    j+=len;
+    for (; j <= 30; j++)
+        printf(" ");
+
+    /** Print location centered **/
+    printf("|");
+    len = strlen(t->location);
+    for (j = 1; j <= (30-len)/2; j++)
+        printf(" ");
+    printf("%s", t->location);
+    j+=len;
+    for (; j <= 30; j++)
+        printf(" ");
+
+    /** Print points right aligned with 1 space to the left and to the right **/
+    printf("| %6d ", TeamGetPoints(t));
+    printf("|\n");
+}
+
 void ListTeams(void) {
-    size_t i, len, j;
+    size_t i;
     /*               30 characters                   30 characters      Right aligned */
     printf("_____________________________________________________________________________\n"
            "| id |            Nome              |          Localidade          | Pontos |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
     for (i=0; i < NUM_TEAMS; i++) {
-        printf("|%-4lu", i);
-        /** Print Name centered **/
-        printf("|");
-        len = strlen(Teams[i].name);
-        for (j = 1; j <= (30-len)/2; j++)
-            printf(" ");
-        printf("%s", Teams[i].name);
-        j+=len;
-        for (; j <= 30; j++)
-            printf(" ");
-
-        /** Print location centered **/
-        printf("|");
-        len = strlen(Teams[i].location);
-        for (j = 1; j <= (30-len)/2; j++)
-            printf(" ");
-        printf("%s", Teams[i].location);
-        j+=len;
-        for (; j <= 30; j++)
-            printf(" ");
-
-        /** Print points right aligned with 1 space to the left and to the right **/
-        printf("| %6d ", TeamGetPoints(&Teams[i]));
-        printf("|\n");
+        TablePrintTeam(i, &Teams[i]);
     }
 
     printf("------------------------------------------------------------------------------\n");
@@ -154,4 +160,18 @@ void NewGame(const char* input) {
 
 }
 void DeleteGame(const char* input) {printf("DeleteGame() called with '%s'\n", input);}
-void ShowScoreboard(void) {}
+void ShowScoreboard(void) {
+    list_t* tmp;
+    int i=1;
+    ScoreboardList = ScoreboardListUpdate(ScoreboardList, NULL);
+    tmp = ScoreboardList->next; /* Jump over header. FIXME: Need function for this */
+
+    printf("_____________________________________________________________________________\n"
+           "| id |            Nome              |          Localidade          | Pontos |\n"
+           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
+    while (!ListIsFooter(tmp)) {
+        TablePrintTeam(i++, (Team*)tmp->data);
+        tmp = ListIterateNext(tmp);
+    }
+    printf("------------------------------------------------------------------------------\n");
+}

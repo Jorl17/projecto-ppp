@@ -6,10 +6,12 @@
 #include "Actions.h"          /*  All actions */
 #include "GameList.h"         /*  Game */
 #include "Team.h"
+#include "TeamScoreBoardList.h"
 
 int main(void) {
     char cmd[NAME_SIZE+1]={0};
     /* size_t cmdlen; NOT YET USED */
+    ScoreboardList = NULL;
 
     /******************************** TESTING STUFF *******************************/
     Team* selectedTeam;

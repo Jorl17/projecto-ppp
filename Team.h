@@ -8,9 +8,10 @@ struct _Team {
     list_t* gameList;
 };
 
-void TeamPointsUpdateWithGame(Team* team, Game* game);
+void TeamPointsUpdateWithGame(Team* team, Game* game, bool remove);
 void TeamUpdateGameListCache(Team* team, list_t* gameNode);
 int TeamGetPoints(Team* team);
+void TeamDelGame(Team* team, list_t* gameNode);
 
 extern Team*      Teams;        /* All teams, ordered alphabetically */
 extern size_t     NUM_TEAMS;

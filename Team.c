@@ -4,8 +4,8 @@
 #include "TeamGameList.h"
 
 int TeamGetPoints(Team* team) {
-    ASSERT(team);
     list_t* tmp;
+    ASSERT(team);
     /* If there isn't anything cached yet. */
 
     if (team->points==-1) {
@@ -26,9 +26,9 @@ int TeamGetPoints(Team* team) {
 }
 
 void TeamPointsUpdateWithGame(Team* team, Game* game, bool remove) {
+    int pts=0;
     ASSERT(team);
     ASSERT(game);
-    int pts=0;
     if (game->homeTeam == team) {
         /* We play home */
         if ( game->outcome == OUTCOME_HOMEWIN)

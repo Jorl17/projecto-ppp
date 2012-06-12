@@ -6,9 +6,11 @@
 #include "Actions.h"          //  All actions
 #include "GameList.h"         //  GameList, Game
 #include "Team.h"
+#include "TeamScoreBoardList.h"
 
 int main(void) {
     char cmd[NAME_SIZE+1]={0};
+    ScoreboardList = NULL;
     // size_t cmdlen; NOT YET USED
 
     /******************************** TESTING STUFF *******************************/

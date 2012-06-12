@@ -23,12 +23,14 @@ size_t readString(char* str, size_t maxlen) {
     return 0;
   
   len = strlen(str);
+
+  if (str[len-1]=='\n'){
+      str[len-1]='\0';
+      len--;
+      /* Clean buffer */
+  }
   if (len == maxlen-1) {
       flushInputBuffer();
-  }
-  else if (str[len-1]=='\n'){
-      str[len-1]='\0';
-      /* Clean buffer */
   }
   return len;
 }

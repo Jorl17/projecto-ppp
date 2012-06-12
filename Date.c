@@ -43,7 +43,7 @@ Date DATEMIN = {0,0,0};
 
 Date getDateFromUser(const char* msg) {
 #define MAX_DATE_SIZE 12 /* dd/mm/aaaa 0 -- the extra space has an explanation below.*/
-#define MIN_DATE_CHARACTERS 7/* d/m/aa\0 */
+#define MIN_DATE_CHARACTERS 6/* d/m/aa\0 */
     size_t read;
     char str[MAX_DATE_SIZE];
     char* token;
@@ -52,7 +52,7 @@ Date getDateFromUser(const char* msg) {
         printf("%s: ", msg); fflush(stdout);
     }
 
-    read = readString(str, MAX_DATE_SIZE-1);
+    read = readString(str, MAX_DATE_SIZE-2);
     /* Add a space at the end because of strtok() eating it up as if it were a token */
     str[read]=' ';
     str[read+1]='\0';

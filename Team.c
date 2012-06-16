@@ -74,6 +74,9 @@ void TeamUpdateGameListCache(Team* team, list_t* gameNode) {
 }
 
 void TeamDelGame(Team* team, Game* g) {
-    TeamGameListDelGame(team->gameList,g);
-    TeamPointsUpdateWithGame(team, g, true);
+    if ( team->gameList ) {
+        TeamGameListDelGame(team->gameList,g);
+        if (team->points != -1)
+            TeamPointsUpdateWithGame(team, g, true);
+    }
 }

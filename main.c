@@ -98,7 +98,7 @@ int main(void) {
         else if ( !strncmp(cmd, "ADD", 3) ) {
             NewGame(&cmd[4]); // 4 = strlen("ADD ")
         }
-        else if ( !strcmp(cmd, "DEL") ) {
+        else if ( !strncmp(cmd, "DEL", 3) ) {
             DeleteGame(&cmd[3]); // 3 = strlen("DEL")
         }
         else if ( !strcmp(cmd, "SCORE") ) {

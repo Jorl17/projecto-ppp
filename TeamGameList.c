@@ -58,6 +58,9 @@ void TeamGameListDel(list_t* l) {
 // FIXME: NOT USED YET!!!
 //
 void TeamGameListDelGame(list_t* list, Game* g) {
+    ASSERT(list);
+    ASSERT(g);
+
     list = list->next;
     while(!ListIsFooter(list)) {
         if (compareGamesAux(list->data, g)) {

@@ -112,9 +112,25 @@ list_t* ListIteratePrev(list_t* list) {
 }
 
 bool ListIsHeader(list_t* list) {
+    ASSERT(list);
     return list->prev==NULL;
 }
 
 bool ListIsFooter(list_t* list) {
+    ASSERT(list);
     return list->next == NULL;
+}
+
+list_t* ListFindNode(list_t* list, void* data) {
+    ASSERT(list);
+    list = list->next;
+    while(!ListIsFooter(list)) {
+        if (list->data == data) {
+            return list;
+        }
+
+        list = ListIterateNext(list);
+    }
+
+    return NULL;
 }

@@ -39,5 +39,7 @@ bool ListIsFooter(list_t* list);
 
 list_t* ListAdd(list_t* list, void* g, compareFunc funct);
 
+list_t* ListFindNode(list_t* list, void* data);
+
 #define LIST_DATA(list, type) ((type*)list->data)
 #endif /* LIST_T_H */

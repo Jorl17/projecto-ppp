@@ -78,7 +78,7 @@ void ShowGames(void) {
     printf("________________________________________________________________________________________\n"
            "| id |        Equipa da Casa        | Res. |       Equipa Visitante       |    Data    |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^|\n");
-    /* ex:  |1   |           FC Porto           |V    D|           SL Bosta           | 03/04/1994 |\n); */
+    /* ex:  |1   |           FC Porto           |V    D|           SL Bosta           |  3/ 4/1994 |\n); */
     if (LastGameList == NULL) {
         local = Games->next;
         while(local->next) {
@@ -190,9 +190,46 @@ void NewGame(const char* input) {
 
 }
 void DeleteGame(const char* input) {
-    printf("DeleteGame() called with '%s'\n", input);
-    /* If input is zero, then ask for what to delete. Otherwise it must be the id */
-    /* Get id */
+    list_t* iter;
+    Game* g;
+    size_t i=0, id;
+    ASSERT(input);
+    if (!*input)
+      ;/* FIXME:Fetch the input */
+    else
+        id = atoi(input); /*FIXME: Error checking here. */
+    if (LastGameList == NULL) {
+        iter = Games->next;
+        while (!ListIsFooter(iter)) {
+            if (i++==id)
+                break;
+            iter = ListIterateNext(iter);
+        }
+
+        /* FIXME: Update files here, after removing the game */
+        g = GAMELIST_GAME(iter);
+        ASSERT(g->homeTeam);
+        ASSERT(g->awayTeam);
+        TeamDelGame(g->homeTeam, g);
+        TeamDelGame(g->awayTeam, g);
+        ListDel(iter); /* This effectively DELETES the game from memory */
+    } else {
+        list_t* tmp;
+        iter = LastGameList->next;
+        while (!ListIsFooter(iter)) {
+            if (i++==id)
+                break;
+            iter = ListIterateNext(iter);
+        }
+        tmp = (list_t*)iter->data;
+        g = GAMELIST_GAME(tmp);
+        printGame(0, g);
+        ASSERT(g->homeTeam);
+        ASSERT(g->awayTeam);
+        TeamDelGame(g->homeTeam, g);
+        TeamDelGame(g->awayTeam, g);
+        ListDel(tmp); /* The cool thing here is that tmp is already the ponter to the node!! */
+    }
     /* Go to the id-th game in the current gameList (LastGameList or Game if LastGameList==NULL */
     /* If indeed LastGameList != NULL, remove the game from the list and remove it from the TeamGameLists */
     /* Otherwise, remove it from the list and make sure that the teams are also adjusted. (The difference here is that we must search the game in each team's gameList) */

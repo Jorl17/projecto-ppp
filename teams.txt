@@ -1,0 +1,8 @@
+Name: Carapinheira
+Location: Carapinheira
+
+Name: Academica
+Location: Coimbra
+
+Name: Benfica
+Location: Lisboa

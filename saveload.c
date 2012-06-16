@@ -13,29 +13,31 @@ void ReadFiles() {
 
 
 void ReadTeams() {
-	FILE *file = fopen ("WHERE_IS_THE_FILE_SAVED?", "r");
-  char line[NAME_SIZE * 2];
+	FILE *file = fopen ("teams.txt", "r");
+  char name[NAME_SIZE];
+  int NUM_TEAMS = 0;
   
   Teams = malloc(sizeof(Team));
   NUM_TEAMS = 0;
   
-  while (fgets(line, sizeof(line), file) != NULL) {
+   while (fscanf(file, "Name: %s\n", &name) == 1) {
       NUM_TEAMS++;
       Teams = realloc(Teams, sizeof(Team) * NUM_TEAMS);
+      Teams[NUM_TEAMS].index = NUM_TEAMS;
 
-      strcpy(Teams[NUM_TEAMS].name, line);
-      strcpy(Teams[NUM_TEAMS].location, line + NAME_SIZE + 1);
+      strcpy(Teams[NUM_TEAMS].name, name);
+      fscanf(file, "Location: %s\n\n", &Teams[NUM_TEAMS].location);
   };
 };
 
 void ReadGames() {
-    FILE *file = fopen ("WHERE_IS_THE_FILE_SAVED?", "r");
-    Games = malloc(sizeof(list_t));
-
-    list_t* prev = NULL;
+    FILE *file = fopen ("games.txt", "r");
     int i = 0, v;
+  
+    Games = malloc(sizeof(list_t));
+    list_t* prev = NULL;
 
-    while (fscanf(file, "%d", &v) != EOF) {
+    while (fscanf(file, "Home: %d\n", &v) == 1) {
         i++;
         Games = realloc(Games, sizeof(list_t) * i);
 
@@ -45,20 +47,53 @@ void ReadGames() {
         prev->next = node;
         node->prev = prev;
         game->homeTeam = &Teams[v];
-
-        fscanf(file, "%d", &v);
-        fscanf(file, "%d", &game->date.year);
-        fscanf(file, "%d", &game->date.month);
-        fscanf(file, "%d", &game->date.year);
-        fscanf(file, "%d", &game->outcome);
-
+      
+        int day, month, year;
+        fscanf(file, "Away: %d\n", &v);
+        fscanf(file, "%d/%d/%d\n", &day, &month, &year);
+        fscanf(file, "%d\n\n", &game->outcome);
+      
+        game->date.day = day;
+        game->date.month = month;
+        game->date.year = year;
         game->awayTeam = &Teams[v];
         prev = node;
     }
+  
+    prev->next = NULL;
 };
 
 
 // Write
 void UpdateGames(int start) {
-	
+  FILE *file = fopen ("games.txt", "r+");
+  list_t* node = Games;
+  
+  int numLines = start * 5;
+	while (numLines > 0) {
+    int c = fgetc(file);
+    
+    if (c == '\n') {
+      numLines--;
+    } else if (c == EOF) {
+      printf("Error, not enough games found on games.txt. The file may have been corrupted.");
+      return;
+    }
+  }
+  
+  while (start > 0) {
+    node = node->next;
+    start--;
+  }
+  
+  while (node != NULL) {
+    Game* game = GAMELIST_GAME(node);
+    
+    fprintf(file, "Home: %d\n", game->homeTeam->index);
+    fprintf(file, "Away: %d\n", game->awayTeam->index);
+    fprintf(file, "%d/%d/%d\n", (int)game->date.day, (int)game->date.month, (int)game->date.year);
+    fprintf(file, "%d\n\n", game->outcome);
+    
+    node = node->next;
+  }
 };

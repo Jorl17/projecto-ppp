@@ -10,12 +10,11 @@ int TeamGetPoints(Team* team) {
     if (team->points==-1) {
         team->points=0;
         if (!team->gameList) {
-
             TeamUpdateGameListCache(team, NULL);
         } else {
-            tmp= team->gameList;
+            tmp= team->gameList->next;
             while (!ListIsFooter(tmp)) {
-                TeamPointsUpdateWithGame(team, GAMELIST_GAME(tmp), false);
+                TeamPointsUpdateWithGame(team, GAMELIST_GAME(((list_t*)(tmp->data))), false);
                 tmp = ListIterateNext(tmp);
             }
         }
@@ -60,7 +59,7 @@ void TeamUpdateGameListCache(Team* team, list_t* gameNode) {
         while ( !ListIsFooter(iter) ) {
             gamePtr = GAMELIST_GAME(iter);
             if (gamePtr->awayTeam == team || gamePtr->homeTeam == team) {
-                TeamGameListAdd(team->gameList, iter); /* FIXME: We could have a linear add function */
+                TeamGameListAppend(team->gameList, iter);
                 if(team->points != -1)
                     TeamPointsUpdateWithGame(team, gamePtr, false);
             }
@@ -74,10 +73,7 @@ void TeamUpdateGameListCache(Team* team, list_t* gameNode) {
     /* else we've been called to create it but it's already been created. */
 }
 
-void TeamDelGame(Team* team, list_t* gameNode) {
-    /* Find the node */
-    /*glist_t* ourNode = ...*/
-    /*TeamGameListDel(ourNode);*/
-    TeamPointsUpdateWithGame(team, GAMELIST_GAME(gameNode), true);
-    /* FIXME: Also remove points from the team */
+void TeamDelGame(Team* team, Game* g) {
+    TeamGameListDelGame(team->gameList,g);
+    TeamPointsUpdateWithGame(team, g, true);
 }

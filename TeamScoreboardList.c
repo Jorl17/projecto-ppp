@@ -13,11 +13,7 @@ int compareTeamsByPointsAux(void* d1, void* d2) {
 }
 
 int compareTeamsAux(void* d1, void* d2) {
-
-    if (d1==d2)
-        return 0;
-    else
-        return -1;
+    return (d1==d2) ? 0 : -1;
 }
 
 /*

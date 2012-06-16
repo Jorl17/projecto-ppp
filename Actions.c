@@ -12,6 +12,7 @@
 
 Team* getTeamFromInput(const char* input) {
     int iMax=NUM_TEAMS-1, iMin=0, iMed, compare;
+    ASSERT(input);
     if ( isStrNumber(input) ) {
         size_t i = (size_t)atoi(input);
         if (i < NUM_TEAMS)
@@ -33,24 +34,51 @@ Team* getTeamFromInput(const char* input) {
     return NULL;
 }
 
-void printGame(unsigned int id, Game* game) {
-    /* FIXME: This is only a very raw prototype */
-    ASSERT(game);
-    printf("%u. ", id);
-    printDate(game->date, false);
-    printf(": %s vs %s:\t", game->homeTeam->name, game->awayTeam->name);
+void printGame(size_t id, Game* game) {
+    size_t j, len;
+    ASSERT(game); ASSERT(game->homeTeam); ASSERT(game->awayTeam);
+    ASSERT(compareDates(game->date,DATEMIN)); ASSERT(compareDates(game->date,DATEMAX));
+    ASSERT(game->outcome == OUTCOME_HOMEWIN || game->outcome == OUTCOME_AWAYWIN || game->outcome == OUTCOME_DRAW);
+    printf("|%-4lu", id);
+    /** Print Home Team Name centered **/
+    printf("|");
+    len = strlen(game->homeTeam->name);
+    for (j = 1; j <= (30-len)/2; j++)
+        printf(" ");
+    printf("%s", game->homeTeam->name);
+    j+=len;
+    for (; j <= 30; j++)
+        printf(" ");
 
     if (game->outcome == OUTCOME_HOMEWIN)
-        printf("Vitória da Casa\n");
+        printf("|V    D|");
     else if (game->outcome == OUTCOME_AWAYWIN)
-        printf("Derrota da Casa\n");
+        printf("|D    V|");
     else
-        printf("Empate\n");
+        printf("|E    E|");
+
+    /** Print Away Team Name centered **/
+    len = strlen(game->awayTeam->name);
+    for (j = 1; j <= (30-len)/2; j++)
+        printf(" ");
+    printf("%s", game->awayTeam->name);
+    j+=len;
+    for (; j <= 30; j++)
+        printf(" ");
+
+    /** Print date **/
+    printf("| ");
+    printDate(game->date, false);
+    printf(" |\n");
 }
 
 void ShowGames(void) {
     list_t* local;
     size_t c=0;
+    printf("________________________________________________________________________________________\n"
+           "| id |        Equipa da Casa        | Res. |       Equipa Visitante       |    Data    |\n"
+           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^|\n");
+    /* ex:  |1   |           FC Porto           |V    D|           SL Bosta           | 03/04/1994 |\n); */
     if (LastGameList == NULL) {
         local = Games->next;
         while(local->next) {
@@ -66,6 +94,7 @@ void ShowGames(void) {
             }
         }
     }
+    printf("----------------------------------------------------------------------------------------\n");
 }
 
 void TablePrintTeam(size_t i, Team* t) {
@@ -141,7 +170,7 @@ void NewGame(const char* input) {
         if (game.awayTeam==game.homeTeam)
             return ;
 
-        printf("Resultado (V, E, D)? "); fflush(stdout);
+        printf("Resultado (V, E, D da casa)? "); fflush(stdout);
         read = readString(str, 2);
         if (*str=='V' || *str == 'v')
             game.outcome = OUTCOME_HOMEWIN;
@@ -152,6 +181,7 @@ void NewGame(const char* input) {
         else
             return ;
 
+        printf("Jogo adicionado!\n");
     }
 
     printGame(0, &game); /* Just here to test. Dummy ID FIXME*/
@@ -159,7 +189,15 @@ void NewGame(const char* input) {
     tmp=GameListAddGame(Games, game);
 
 }
-void DeleteGame(const char* input) {printf("DeleteGame() called with '%s'\n", input);}
+void DeleteGame(const char* input) {
+    printf("DeleteGame() called with '%s'\n", input);
+    /* If input is zero, then ask for what to delete. Otherwise it must be the id */
+    /* Get id */
+    /* Go to the id-th game in the current gameList (LastGameList or Game if LastGameList==NULL */
+    /* If indeed LastGameList != NULL, remove the game from the list and remove it from the TeamGameLists */
+    /* Otherwise, remove it from the list and make sure that the teams are also adjusted. (The difference here is that we must search the game in each team's gameList) */
+
+}
 void ShowScoreboard(void) {
     list_t* tmp;
     int i=1;
@@ -173,5 +211,5 @@ void ShowScoreboard(void) {
         TablePrintTeam(i++, (Team*)tmp->data);
         tmp = ListIterateNext(tmp);
     }
-    printf("------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------\n");
 }

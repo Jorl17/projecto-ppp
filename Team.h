@@ -11,7 +11,7 @@ struct _Team {
 void TeamPointsUpdateWithGame(Team* team, Game* game, bool remove);
 void TeamUpdateGameListCache(Team* team, list_t* gameNode);
 int TeamGetPoints(Team* team);
-void TeamDelGame(Team* team, list_t* gameNode);
+void TeamDelGame(Team* team, Game* g);
 
 extern Team*      Teams;        /* All teams, ordered alphabetically */
 extern size_t     NUM_TEAMS;

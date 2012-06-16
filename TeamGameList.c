@@ -8,8 +8,38 @@ int compareDatesFromNodeAux(void* d1, void* d2) {
                            ((Game*)((list_t*)d2)->data));
 }
 
+int compareGamesAux(list_t* d1, Game* g) {
+    return (GAMELIST_GAME(d1) == g);
+}
+
 list_t* TeamGameListAdd(list_t* list, list_t* g) {
     return ListAdd(list, (void*)g, &compareDatesFromNodeAux);
+}
+
+/*
+list_t* TeamGameListFindGamelistNode(list_t* list, list_t* node) {
+    list = list->next;
+    while(!ListIsFooter(list)) {
+        if (compareGamesAux(list->data, (void*)node))
+            return list;
+
+        list = ListIterateNext();
+    }
+
+    return NULL;
+}
+*/
+list_t* TeamGameListAppend(list_t* list, list_t* g) {
+    list_t* newNode = (list_t*)malloc(sizeof(list_t));
+    while (!ListIsFooter(list->next)) list = ListIterateNext(list);
+
+    newNode->data = (void*)g;
+    newNode->next = list->next;
+    newNode->prev = list;
+    list->next = newNode;
+    newNode->next->prev = newNode;
+
+    return newNode;
 }
 
 ////
@@ -21,4 +51,21 @@ void TeamGameListDel(list_t* l) {
     l->prev->next = l->next;
     l->next->prev = l->prev;
     free(l);
+}
+
+////
+// Alias for the above, but uses a game (hence, has to find the node that has it)
+// FIXME: NOT USED YET!!!
+//
+void TeamGameListDelGame(list_t* list, Game* g) {
+    list = list->next;
+    while(!ListIsFooter(list)) {
+        if (compareGamesAux(list->data, g)) {
+            TeamGameListDel(list);
+            break;
+        }
+
+        list = ListIterateNext(list);
+    }
+
 }

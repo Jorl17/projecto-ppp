@@ -20,7 +20,6 @@ int compareDatesAux(void* d1, void* d2);
 
 list_t* GameListAddGame(list_t* list, Game g);
 
-
 extern list_t*  Games;        /* Has all games ordered by date */
 extern list_t*  LastGameList; /* Points to the last listed game list. FIXME: it isn't a GameList*/
 extern Game NULL_GAME;

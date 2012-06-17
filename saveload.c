@@ -16,16 +16,17 @@ void ReadTeams() {
 	FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/teams.txt", "r");
   char name[NAME_SIZE];
   
-  Teams = malloc(sizeof(Team));
   NUM_TEAMS = 0;
+  Teams = NULL;
   
    while (fscanf(file, "Name: %s\n", &name) == 1) {
-      NUM_TEAMS++;
-      Teams = realloc(Teams, sizeof(Team) * NUM_TEAMS);
+      Teams = realloc(Teams, sizeof(Team) * (NUM_TEAMS + 1));
       Teams[NUM_TEAMS].index = NUM_TEAMS;
 
-      strcpy(Teams[NUM_TEAMS].name, name);
       fscanf(file, "Location: %s\n\n", &Teams[NUM_TEAMS].location);
+      strcpy(Teams[NUM_TEAMS].name, name);
+     
+      NUM_TEAMS++;
   };
 };
 

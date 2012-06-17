@@ -7,22 +7,36 @@
 #include "GameList.h"         //  GameList, Game
 #include "Team.h"
 #include "TeamScoreBoardList.h"
+#include "saveload.h"
+
+void showHelp() {
+    printf("Command list:\n");
+    printf("teams - lists all teams in the championship\n");
+    printf("scores - lists all teams ordened by current score\n");
+    printf("add - adds a game to the championship\n");
+    printf("del - deletes a game from the championship\n");
+    printf("quit or q - exit the program\n");
+}
 
 int main(void) {
+    printf("Welcome to championship whack-a-mole!\nType \"help\" for more information.\n");
+  
     char cmd[NAME_SIZE+1]={0};
     Team* selectedTeam;
     ScoreboardList = NULL;
-    // size_t cmdlen; NOT YET USE
+    ReadTeams();
 
     while(true) {
+        printf("\n>>> ");
         do {
-            printf("What to do? "); fflush(stdout);
+            fflush(stdout);
         } while ( !readString(cmd, NAME_SIZE) );
+        printf("\n");
 
-        // QUIT
-        if ( ! strcmp(cmd, "QUIT") )
+        if ( ! strcmp(cmd, "q") || ! strcmp(cmd, "quit") ) {
+            printf("Bye bye!");
             break;
-        // SHOW TEAMS and SHOW <TEAM>
+        }
         else if ( !strncmp(cmd, "SHOW ", 5) ) {
             if ( !strcmp(&cmd[5], "TEAMS") ) { // 5 = strlen("SHOW ");
                 LastGameList = NULL;
@@ -35,17 +49,20 @@ int main(void) {
             } else
                 goto wrong_command; // FIXME: 'EVIL' GOTO!
         }
-        else if ( !strcmp(cmd, "LIST") ) {
+        else if ( !strcmp(cmd, "teams") ) {
             ListTeams();
         }
-        else if ( !strncmp(cmd, "ADD", 3) ) {
+        else if ( !strncmp(cmd, "add", 3) ) {
             NewGame(&cmd[4]); // 4 = strlen("ADD ")
         }
-        else if ( !strncmp(cmd, "DEL", 3) ) {
+        else if ( !strncmp(cmd, "del", 3) ) {
             DeleteGame(&cmd[3]); // 3 = strlen("DEL")
         }
-        else if ( !strcmp(cmd, "SCORE") ) {
+        else if ( !strcmp(cmd, "scores") ) {
             ShowScoreboard();
+        }
+        else if ( !strcmp(cmd, "help") ) {
+            showHelp();
         }
         else {
             wrong_command:

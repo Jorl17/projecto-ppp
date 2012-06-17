@@ -13,7 +13,7 @@ void ReadFiles() {
 
 
 void ReadTeams() {
-	FILE *file = fopen ("teams.txt", "r");
+	FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/teams.txt", "r");
   char name[NAME_SIZE];
   int NUM_TEAMS = 0;
   
@@ -31,7 +31,7 @@ void ReadTeams() {
 };
 
 void ReadGames() {
-    FILE *file = fopen ("games.txt", "r");
+    FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/games.txt", "r");
     int i = 0, v;
   
     Games = malloc(sizeof(list_t));
@@ -65,7 +65,7 @@ void ReadGames() {
 
 
 // Write
-void UpdateGames(int start) {
+void WriteGames(int start) {
   FILE *file = fopen ("games.txt", "r+");
   list_t* node = Games;
   

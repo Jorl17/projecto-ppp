@@ -76,7 +76,7 @@ void ShowGames(void) {
     list_t* local;
     size_t c=0;
     printf("________________________________________________________________________________________\n"
-           "| id |        Equipa da Casa        | Res. |       Equipa Visitante       |    Data    |\n"
+           "|    |        Equipa da Casa        | Res. |       Equipa Visitante       |    Data    |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^|\n");
     /* ex:  |1   |           FC Porto           |V    D|           SL Bosta           |  3/ 4/1994 |\n); */
     if (LastGameList == NULL) {
@@ -99,7 +99,6 @@ void ShowGames(void) {
 
 void TablePrintTeam(size_t i, Team* t) {
     size_t j, len;
-    printf("|%-4lu", i);
     /** Print Name centered **/
     printf("|");
     len = strlen(t->name);
@@ -128,14 +127,14 @@ void TablePrintTeam(size_t i, Team* t) {
 void ListTeams(void) {
     size_t i;
     /*               30 characters                   30 characters      Right aligned */
-    printf("_____________________________________________________________________________\n"
-           "| id |            Nome              |          Localidade          | Pontos |\n"
-           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
+    printf("________________________________________________________________________\n"
+           "|            Nome              |          Localidade          | Pontos |\n"
+           "|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
     for (i=0; i < NUM_TEAMS; i++) {
         TablePrintTeam(i, &Teams[i]);
     }
 
-    printf("------------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
 }
 
 void NewGame(const char* input) {
@@ -241,12 +240,12 @@ void ShowScoreboard(void) {
     ScoreboardList = ScoreboardListUpdate(ScoreboardList, NULL);
     tmp = ScoreboardList->next; /* Jump over header. FIXME: Need function for this */
 
-    printf("_____________________________________________________________________________\n"
-           "| id |            Nome              |          Localidade          | Pontos |\n"
-           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
+    printf("________________________________________________________________________\n"
+           "|            Nome              |          Localidade          | Pontos |\n"
+           "|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
     while (!ListIsFooter(tmp)) {
         TablePrintTeam(i++, (Team*)tmp->data);
         tmp = ListIterateNext(tmp);
     }
-    printf("-----------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------\n");
 }

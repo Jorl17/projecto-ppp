@@ -8,8 +8,21 @@
 #include "Date.h"
 #include "TeamScoreBoardList.h"
 #include "saveload.h"
+#include "Actions.h"
 
 #define ASSERT assert
+
+void clearScreen(void) {
+#if !defined(CLRSCRN_STANDARD) && (defined(__unix__) || defined(unix) || defined(__unix) || defined (__linux) || defined(__linux__) || defined(linux))
+    system("clear");
+#elif !defined(CLRSCRN_STANDARD) && (defined(_WIN32) || defined(WIN32) || defined(__WIN32__) || defined(__WINDOWS__) || defined(__TOS_WIN__))
+    system("cls");
+#else
+    size_t i;
+    for (i=0; i < 80; i++)
+        printf("\n");
+#endif
+}
 
 Team* getTeamFromInput(char* input) {
     ASSERT(input);
@@ -59,6 +72,8 @@ void printGame(size_t id, Game* game) {
 void ShowGames(void) {
     list_t* local;
     size_t c=0;
+    if(ClearScreen)
+        clearScreen();
     printf("___________________________________________________________________________________________\n"
            "| id |        Equipa da Casa        |  Resu.  |       Equipa Visitante       |    Data    |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^|\n");
@@ -111,6 +126,8 @@ void TablePrintTeam(size_t i, Team* t) {
 
 void ListTeams(void) {
     size_t i;
+    if(ClearScreen)
+        clearScreen();
     /*               30 characters                   30 characters      Right aligned */
     printf("_____________________________________________________________________________\n"
            "| id |            Nome              |          Localidade          | Pontos |\n"
@@ -122,102 +139,150 @@ void ListTeams(void) {
     printf("------------------------------------------------------------------------------\n");
 }
 
-void NewGame(const char* input) {
+void NewGame(void) {
     Game game;
     size_t read;
     char str[NAME_SIZE];
-    char* token;
     list_t* tmp;
-    if (*input) {
-        /* User probably passed in the data through the commandline */
-        /* FIXME */
-    } else {
-        game.date=getDateFromUser("Data do jogo?");
-        if (!compareDates(game.date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
-            return ;
+    game.date=getDateFromUser("Data do jogo?");
+    if (!compareDates(game.date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
+        return ;
 
-        printf("Equipa da Casa? "); fflush(stdout);
-        read = readString(str, NAME_SIZE);
-        if (!read)
-            return ;
+    printf("Equipa da Casa? "); fflush(stdout);
+    read = readString(str, NAME_SIZE);
+    if (!read)
+        return ;
 
-        else if ( ! (game.homeTeam = getTeamFromInput(str)) )
-            return ;
+    else if ( ! (game.homeTeam = getTeamFromInput(str)) )
+        return ;
 
-        printf("Equipa Visitante? "); fflush(stdout);
-        read = readString(str, NAME_SIZE);
-        if (!read)
-            return ;
+    printf("Equipa Visitante? "); fflush(stdout);
+    read = readString(str, NAME_SIZE);
+    if (!read)
+        return ;
 
-        else if ( ! (game.awayTeam = getTeamFromInput(str)) )
-            return ;
+    else if ( ! (game.awayTeam = getTeamFromInput(str)) )
+        return ;
 
-        if (game.awayTeam==game.homeTeam)
-            return ;
+    if (game.awayTeam==game.homeTeam)
+        return ;
 
-        printf("Resultado (pts-pts)? "); fflush(stdout);
-        read = readString(str, NAME_SIZE);
-        if (!strToResult(str, &game.homePoints, &game.awayPoints))
-            return ;
-    }
+    printf("Resultado (pts-pts)? "); fflush(stdout);
+    read = readString(str, NAME_SIZE);
+    if (!strToResult(str, &game.homePoints, &game.awayPoints))
+        return ;
 
     printf("Jogo adicionado!\n");
 
     tmp=GameListAddGame(Games, game, true);
-
 }
-void DeleteGame(const char* input) {
+void DeleteGame(char* input) {
     list_t* iter;
     Game* g;
-    size_t i=0, id;
+    size_t i=0;
+    int id;
     ASSERT(input);
-    if (!*input)
-      ;/* FIXME:Fetch the input */
-    else
-        id = atoi(input); /*FIXME: Error checking here. */
+    if (!*input) {
+        char line[100];
+        ShowGames();
+        printf("A tabela mais recente de jogos esta por cima desta frase.\n");
+        printf("Deseja remover um destes jogos (s/n)? "); fflush(stdout);
+        if(!readString(line, 100)) {
+            goto err;
+        }
+        if (strCaseEqual(line, "s")) {
+            ;
+        } else if (strCaseEqual(line, "n")) {
+            printf("Deseja ver a lista geral de jogos ou a de uma equipa em particular? (geral/particular) "); fflush(stdout);
+            if(!readString(line, 100)) {
+                goto err;
+            }
+            if (strCaseEqual(line, "geral")) {
+                LastGameList = NULL;
+                ShowGames();
+            } else if (strCaseEqual(line, "particular")) {
+                Team* team;
+                printf("Qual a equipa cujos jogos quer ver? (nome/id) "); fflush(stdout);
+                if(!readString(line, 100)) {
+                    goto err;
+                }
+                team = getTeamFromInput(line);
+                if(!team) {
+                    goto err;
+                }
+                TeamUpdateGameListCache(team, NULL);
+                LastGameList = team->gameList;
+                ShowGames();
+            } else {
+                goto err;
+            }
+        } else {
+            goto err;
+        }
+
+        printf("Insira o ID do jogo: "); fflush(stdout);
+
+        if(!readString(input, 10)) {
+            goto err;
+        }
+    }
+
+    trimString(input);
+    id = atoi(input);
+    if (id < 0)
+        goto err;
     if (LastGameList == NULL) {
         iter = Games->next;
         while (!ListIsFooter(iter)) {
-            if (i++==id)
+            if (i++==(size_t)id)
                 break;
             iter = ListIterateNext(iter);
         }
 
-        /* FIXME: Update files here, after removing the game */
+        if(ListIsFooter(iter))
+            goto err;
+
         g = GAMELIST_GAME(iter);
         ASSERT(g->homeTeam);
         ASSERT(g->awayTeam);
         TeamDelGame(g->homeTeam, g);
         TeamDelGame(g->awayTeam, g);
-        ScoreboardListUpdate(ScoreboardList, g);
+        if (ScoreboardList)
+            ScoreboardListUpdate(ScoreboardList, g);
         ListDel(iter); /* This effectively DELETES the game from memory */
         UpdateGames();
     } else {
         list_t* tmp;
         iter = LastGameList->next;
         while (!ListIsFooter(iter)) {
-            if (i++==id)
+            if (i++==(size_t)id)
                 break;
             iter = ListIterateNext(iter);
         }
+        if(ListIsFooter(iter))
+            goto err;
         tmp = (list_t*)iter->data;
         g = GAMELIST_GAME(tmp);
-        printGame(0, g);
         ASSERT(g->homeTeam);
         ASSERT(g->awayTeam);
         TeamDelGame(g->homeTeam, g);
         TeamDelGame(g->awayTeam, g);
-        ScoreboardListUpdate(ScoreboardList, g);
+        if (ScoreboardList)
+            ScoreboardListUpdate(ScoreboardList, g);
         ListDel(tmp); /* The cool thing here is that tmp is already the ponter to the node!! */
     }
-    /* Go to the id-th game in the current gameList (LastGameList or Game if LastGameList==NULL */
-    /* If indeed LastGameList != NULL, remove the game from the list and remove it from the TeamGameLists */
-    /* Otherwise, remove it from the list and make sure that the teams are also adjusted. (The difference here is that we must search the game in each team's gameList) */
 
+    printf("Jogo eliminado.\n");
+    return;
+    err:
+    printf("Resposta invalida.\n");
+    return ;
 }
 void ShowScoreboard(void) {
     list_t* tmp;
     int i=1;
+    if(ClearScreen)
+        clearScreen();
     ScoreboardList = ScoreboardListUpdate(ScoreboardList, NULL);
     tmp = ScoreboardList->next; /* Jump over header. FIXME: Need function for this */
 

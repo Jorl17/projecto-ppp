@@ -17,7 +17,8 @@ int compareTeamsAux(void* d1, void* d2) {
 }
 
 /*
-  Must be called AFTER the game has been removed.
+  Must be called AFTER the game has been removed for the teams but NOT after
+  it's been deleted from memory.
   */
 list_t* ScoreboardListUpdate(list_t* list, Game* game) {
     if (!list) {

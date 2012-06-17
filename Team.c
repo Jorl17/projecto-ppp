@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 #define ASSERT assert
 #include "Team.h"
 #include "TeamGameList.h"

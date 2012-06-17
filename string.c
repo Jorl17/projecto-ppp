@@ -66,7 +66,7 @@ bool isStrNumber(const char* s) {
   return true;
 }
 
-bool strCaseEqual(char* s1, char* s2, size_t n) {
+bool strCaseEqualn(char* s1, char* s2, size_t n) {
     while (n--) {
         if (!*s1 || !*s2)
             return false;
@@ -76,6 +76,18 @@ bool strCaseEqual(char* s1, char* s2, size_t n) {
         s1++; s2++;
     }
 
+    return true;
+}
+
+bool strCaseEqual(char* s1, char* s2) {
+    while (*s1 && *s2) {
+
+        if (toupper(*s1) != toupper(*s2))
+            return false;
+        s1++; s2++;
+    }
+    if (*s1 != *s2)
+        return false;
     return true;
 }
 
@@ -92,21 +104,24 @@ void trimString(char* s) {
 
 bool strToResult(char* str, uint8_t* pts1, uint8_t* pts2) {
     char* token;
+    int pts1i, pts2i;
     token = strtok(str, "-");;
 
     if (token==NULL || !isStrNumber(token))
         return false;
-    *pts1 = atoi(token);
+    pts1i = atoi(token);
     token = strtok(NULL, "-");
 
-    if (*pts1 > 255)
+    if (pts1i > 255)
         return false; /* byte overflow */
     if (token==NULL || !isStrNumber(token))
         return false;
-    *pts2 = atoi(token);
+    pts2i = atoi(token);
 
-    if (*pts2 > 255)
+    if (pts2i > 255)
         return false; /* byte overflow */
 
+    *pts1= pts1i;
+    *pts2= pts2i;
     return true;
 }

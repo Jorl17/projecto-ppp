@@ -7,60 +7,10 @@
 #include "GameList.h"         //  GameList, Game
 #include "Team.h"
 #include "TeamScoreBoardList.h"
+#include "saveload.h"
 
-int main(void) {
-    char cmd[NAME_SIZE+1]={0};
-    ScoreboardList = NULL;
+void cleanup(void) {
     size_t i;
-
-    /******************************** TESTING STUFF *******************************/
-    Team* selectedTeam;
-    ReadFiles();
-
-    LastGameList = NULL;
-    /**************************************************************************/
-
-    while(true) {
-        do {
-            printf("What to do? "); fflush(stdout);
-        } while ( !readString(cmd, NAME_SIZE) );
-
-        // QUIT
-        if ( ! strcmp(cmd, "QUIT") )
-            break;
-        // SHOW TEAMS and SHOW <TEAM>
-        else if ( !strncmp(cmd, "SHOW ", 5) ) {
-            if ( !strcmp(&cmd[5], "TEAMS") ) { // 5 = strlen("SHOW ");
-                LastGameList = NULL;
-                ShowGames();
-            } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
-                TeamUpdateGameListCache(selectedTeam, NULL);
-                LastGameList = selectedTeam->gameList;
-                printf("TEAM: %s\n", selectedTeam->name); // FIXME: TESTING
-                ShowGames();
-            } else
-                goto wrong_command; // FIXME: 'EVIL' GOTO!
-        }
-        else if ( !strcmp(cmd, "LIST") ) {
-            ListTeams();
-        }
-        else if ( !strncmp(cmd, "ADD", 3) ) {
-            NewGame(&cmd[4]); // 4 = strlen("ADD ")
-        }
-        else if ( !strncmp(cmd, "DEL", 3) ) {
-            DeleteGame(&cmd[3]); // 3 = strlen("DEL")
-        }
-        else if ( !strcmp(cmd, "SCORE") ) {
-            ShowScoreboard();
-        }
-        else {
-            wrong_command:
-            printf("Unrecognized command.\n");
-        }
-
-    }
-
-    /******************************** TESTING *******************************/
     ListDelete(Games);
     for (i=0; i < NUM_TEAMS; i++)
         if (Teams[i].gameList)
@@ -68,7 +18,79 @@ int main(void) {
     if (ScoreboardList)
         ListDeleteNoFreeData(ScoreboardList);
     free(Teams);
-    /************************************************************************/
+}
+
+int main(void) {
+    char cmd[NAME_SIZE+1]={0};
+    Team* selectedTeam;
+    ScoreboardList = NULL;
+    LastGameList = NULL;
+    ClearScreen = true;
+    atexit(&cleanup);
+    printf("A ler ficheiros de dados..."); fflush(stdout);
+    ReadFiles();
+    printf("pronto!\n");
+
+    while(true) {
+        do {
+            printf("O que fazer? "); fflush(stdout);
+        } while ( !readString(cmd, NAME_SIZE) );
+
+        if ( strCaseEqual(cmd, "SAIR") )
+            break;
+        else if ( strCaseEqualn(cmd, "JOGOS", 5) ) {
+            if (!cmd[5]) {
+                LastGameList = NULL;
+                ShowGames();
+            } else if ( (selectedTeam = getTeamFromInput(&cmd[5])) != NULL ){
+                TeamUpdateGameListCache(selectedTeam, NULL);
+                LastGameList = selectedTeam->gameList;
+                printf("EQUIPA: %s\n", selectedTeam->name);
+                ShowGames();
+            } else
+                goto wrong_command;
+        }
+        else if ( strCaseEqual(cmd, "EQUIPAS") ) {
+            ListTeams();
+        }
+        else if ( strCaseEqual(cmd, "NOVO") ) {
+            NewGame();
+        }
+        else if ( strCaseEqualn(cmd, "APAGAR", 6) ) {
+            DeleteGame(&cmd[6]);
+        }
+        else if ( strCaseEqual(cmd, "CLASS") ) {
+            ShowScoreboard();
+        }
+        else if (strCaseEqual(cmd, "LIMP")) {
+            if (!ClearScreen) {
+                ClearScreen = true;
+                printf("Activada limpeza de ecra.\n");
+            } else {
+                ClearScreen = false;
+                printf("Desactivada limpeza de ecra.\n");
+            }
+        }
+        else if (strCaseEqual(cmd, "AJUDA")) {
+            if(ClearScreen)
+                clearScreen();
+            printf("Comandos:\n"
+                   "SAIR       -- Sai do programa.\n"
+                   "EQUIPAS    -- Lista equipas ordenadas alfabeticamente.\n"
+                   "JOGOS      -- Lista todos os jogos, por data.\n"
+                   "JOGOS [x]  -- Lista todos os jogos, por data, da equipa [x], em que [x] pode ser ou seu nome ou o seu id.\n"
+                   "CLASS      -- Mostra a classificacao das equipas.\n"
+                   "NOVO       -- Inicia a adicao de um novo jogo.\n"
+                   "APAGAR     -- Inicia a adicao de um novo jogo.\n"
+                   "APAGAR [x] -- Apaga o jogo com o id [x] (da listagem mais recente).\n"
+                   "LIMP       -- Activa/Desactiva a limpeza de ecra aquando de um comando..\n\n");
+        }
+        else {
+            wrong_command:
+            printf("Comando desconhecido. Talvez possa tentar AJUDA.\n");
+        }
+
+    }
 
     return 0;
 }

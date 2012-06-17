@@ -6,12 +6,12 @@
 #include "saveload.h"
 #include "string.h"
 
-#define ERROR_OUT(msg, ...) {printf("ERROR: " msg "\n" , ## __VA_ARGS__); exit(-1);}
+#define ERROR_OUT(msg, ...) do {printf("ERROR: " msg "\n" , __VA_ARGS__); fclose(file); exit(-1);} while(0)
 
 // Read
 void ReadFiles() {
-	ReadTeams();
-	ReadGames();
+    ReadTeams();
+    ReadGames();
 };
 
 
@@ -44,26 +44,26 @@ void ReadTeams() {
 
     while (readStringFile(line, 100, file)) {
         count++;
-        if (!strCaseEqual(line, "Nome:", 5))
-            ERROR_OUT("Erro ao encontrar o nome da equipa na linha %lu. Lido: '%s'", count, line)
+        if (!strCaseEqualn(line, "Nome:", 5))
+            ERROR_OUT("Erro ao encontrar o nome da equipa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[5]);
         if (strlen(&line[5]) >= NAME_SIZE-1)
-                    ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line)
+                    ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line);
 
         strcpy(name, &line[5]);
 
 
         if ((r=readStringFile(line, 100, file)) == 0)
-            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma localidade).")
+            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma localidade). na linha %lu", count);
         count++;
 
-        if (!strCaseEqual(line, "Localidade:",11))
-            ERROR_OUT("Erro ao encontrar a localidade da equipa na linha %lu. Lido: '%s'", count, line)
+        if (!strCaseEqualn(line, "Localidade:",11))
+            ERROR_OUT("Erro ao encontrar a localidade da equipa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[11]);
         if (strlen(&line[11]) >= NAME_SIZE-1)
-            ERROR_OUT("Localidade de equipa demasiado longa na linha %lu. Lido; '%s'", count, line)
+            ERROR_OUT("Localidade de equipa demasiado longa na linha %lu. Lido; '%s'", count, line);
 
         strcpy(location, &line[11]);
         trimString(location);
@@ -78,7 +78,6 @@ void ReadTeams() {
 
 void ReadGames() {
     char line[100];
-    char name[NAME_SIZE], location[NAME_SIZE];
     int r;
     size_t count=0;
     FILE *file = fopen ("games.txt", "r");
@@ -86,54 +85,54 @@ void ReadGames() {
     Games = ListNew();
     while (readStringFile(line, 100, file)) {
         count++;
-        if (!strCaseEqual(line, "Casa:", 5))
-            ERROR_OUT("Erro ao encontrar o nome da equipa da casa na linha %lu. Lido: '%s'", count, line)
+        if (!strCaseEqualn(line, "Casa:", 5))
+            ERROR_OUT("Erro ao encontrar o nome da equipa da casa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[5]);
         if (strlen(&line[5]) >= NAME_SIZE-1)
-            ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line)
+            ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line);
 
         tmp.homeTeam=TeamFind(&line[5]);
         if (!tmp.homeTeam)
-            ERROR_OUT("Nome de equipa não encontrado (ou inválido) na linha %lu. Lido: '%s'", count, line)
+            ERROR_OUT("Nome de equipa não encontrado (ou inválido) na linha %lu. Lido: '%s'", count, line);
 
         if ((r=readStringFile(line, 100, file)) == 0)
-            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma equipa).")
+            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma equipa). na linha %lu", count);
         count++;
 
-        if (!strCaseEqual(line, "Fora:",5))
-            ERROR_OUT("Erro ao encontrar a localidade da equipa na linha %lu. Lido: '%s'", count, line)
+        if (!strCaseEqualn(line, "Fora:",5))
+            ERROR_OUT("Erro ao encontrar a localidade da equipa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[5]);
         if (strlen(&line[5]) >= NAME_SIZE-1)
-            ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line)
+            ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line);
 
         tmp.awayTeam=TeamFind(&line[5]);
         if (!tmp.awayTeam)
-            ERROR_OUT("Nome de equipa não encontrado (ou inválido) na linha %lu. Lido: '%s'", count, line)
+            ERROR_OUT("Nome de equipa não encontrado (ou inválido) na linha %lu. Lido: '%s'", count, line);
 
         if ((r=readStringFile(line, 100, file)) == 0)
-            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma data).")
+            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma data). na linha %lu", count);
         count++;
 
-        if (!strCaseEqual(line, "Data:",5))
-            ERROR_OUT("Erro ao encontrar o resultado da equipa na linha %lu. Lido: '%s'", count, line)
+        if (!strCaseEqualn(line, "Data:",5))
+            ERROR_OUT("Erro ao encontrar o resultado da equipa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[5]);
         tmp.date = getDateFromInput(&line[5]);
         if (!memcmp(&tmp.date,&DATEMIN, sizeof(Date)))
-            ERROR_OUT("Erro ao interpretar a data na linha %lu. Lido: '%s'", count, line)
+            ERROR_OUT("Erro ao interpretar a data na linha %lu. Lido: '%s'", count, line);
 
         if ((r=readStringFile(line, 100, file)) == 0)
-            ERROR_OUT("Fim do ficheiro inesperado (esperava-se um resultado).")
+            ERROR_OUT("Fim do ficheiro inesperado (esperava-se um resultado). na linha %lu", count);
         count++;
 
-        if (!strCaseEqual(line, "Resultado:",10))
-            ERROR_OUT("Erro ao encontrar o resultado da equipa na linha %lu. Lido: '%s'", count, line)
+        if (!strCaseEqualn(line, "Resultado:",10))
+            ERROR_OUT("Erro ao encontrar o resultado da equipa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[10]);
         if (!strToResult(&line[10], &tmp.homePoints, &tmp.awayPoints))
-            ERROR_OUT("Erro ao interpretar o resultado na linha %lu. Lido: '%s'", count, line)
+            ERROR_OUT("Erro ao interpretar o resultado na linha %lu. Lido: '%s'", count, line);
 
         GameListAddGame(Games, tmp, false);
 

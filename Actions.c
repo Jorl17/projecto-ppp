@@ -96,9 +96,12 @@ void ShowGames(void) {
     printf("-------------------------------------------------------------------------------------------\n");
 }
 
-void TablePrintTeam(size_t i, Team* t) {
+void TablePrintTeam(size_t i, bool showPos, Team* t) {
     size_t j, len;
-    printf("|%-4lu", i);
+    if (showPos) {
+      printf("|%-9lu", i);
+    }
+  
     /** Print Name centered **/
     printf("|");
     len = strlen(t->name);
@@ -129,51 +132,83 @@ void ListTeams(void) {
     if(ClearScreen)
         clearScreen();
     /*               30 characters                   30 characters      Right aligned */
-    printf("_____________________________________________________________________________\n"
-           "| id |            Nome              |          Localidade          | Pontos |\n"
-           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
+    printf("________________________________________________________________________\n"
+           "|            Nome              |          Localidade          | Pontos |\n"
+           "|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
     for (i=0; i < NUM_TEAMS; i++) {
-        TablePrintTeam(i, &Teams[i]);
+        TablePrintTeam(i, false, &Teams[i]);
     }
 
-    printf("------------------------------------------------------------------------------\n");
+    printf("-------------------------------------------------------------------------\n");
+}
+
+void TeamNameError(char str[]) {
+  printf("%s não é uma equipa registada no campeonato.\n\n", str);
+}
+
+void RequestPoints(char msg[], u_int8_t* points) {
+  char str[NAME_SIZE];
+  size_t read;
+  
+  Points:
+  printf("%s", msg); fflush(stdout);
+  read = readString(str, NAME_SIZE);
+  if (!read) {
+    printf("O valor tem de ser um número.\n\n");
+    goto Points;
+  }
+  
+  if (!isStrNumber(str)) {
+    printf("O valor tem de ser um número.\n\n");
+    goto Points;
+  }
+  
+  *points = atoi(str);
 }
 
 void NewGame(void) {
-    Game game;
     size_t read;
     char str[NAME_SIZE];
+  
+    Game game;
     list_t* tmp;
-    game.date=getDateFromUser("Data do jogo?");
-    if (!compareDates(game.date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
-        return ;
 
-    printf("Equipa da Casa? "); fflush(stdout);
+    Home_team:
+    printf("Equipa da Casa: "); fflush(stdout);
     read = readString(str, NAME_SIZE);
     if (!read)
-        return ;
+        goto Home_team;
 
-    else if ( ! (game.homeTeam = getTeamFromInput(str)) )
-        return ;
+    else if ( ! (game.homeTeam = getTeamFromInput(str)) ) {
+      TeamNameError(str);
+      goto Home_team;
+    }
 
-    printf("Equipa Visitante? "); fflush(stdout);
+    Away_team:
+    printf("Equipa Visitante: "); fflush(stdout);
     read = readString(str, NAME_SIZE);
     if (!read)
-        return ;
+        goto Away_team;
 
-    else if ( ! (game.awayTeam = getTeamFromInput(str)) )
-        return ;
+    else if ( ! (game.awayTeam = getTeamFromInput(str)) ) {
+      TeamNameError(str);
+      goto Away_team;
+    }
 
-    if (game.awayTeam==game.homeTeam)
-        return ;
+    if (game.awayTeam==game.homeTeam) {
+      printf("A equipa da casa e a visitante não podem ser a mesma.\n\n");
+      goto Away_team;
+    }
+  
+    Date:
+    game.date=getDateFromUser("Data: ");
+    if (!compareDates(game.date,DATEMIN)) {
+      printf("A data não é válida. O formato é: d/m/yyyy.\n\n");
+      goto Date;
+    }
 
-    printf("Resultado (pts-pts)? "); fflush(stdout);
-    read = readString(str, NAME_SIZE);
-    if (!strToResult(str, &game.homePoints, &game.awayPoints))
-        return ;
-
-    printf("Jogo adicionado!\n");
-
+    RequestPoints("Pontos da casa: ",  &game.homePoints);
+    RequestPoints("Pontos dos visitantes: ",  &game.awayPoints);
     tmp=GameListAddGame(Games, game, true);
 }
 void DeleteGame(char* input) {
@@ -186,7 +221,7 @@ void DeleteGame(char* input) {
         char line[100];
         ShowGames();
         printf("A tabela mais recente de jogos esta por cima desta frase.\n");
-        printf("Deseja remover um destes jogos (s/n)? "); fflush(stdout);
+        printf("Deseja remover algum destes jogos (s/n)? "); fflush(stdout);
         if(!readString(line, 100)) {
             goto err;
         }
@@ -202,7 +237,7 @@ void DeleteGame(char* input) {
                 ShowGames();
             } else if (strCaseEqual(line, "particular")) {
                 Team* team;
-                printf("Qual a equipa cujos jogos quer ver? (nome/id) "); fflush(stdout);
+                printf("Qual a equipa cujos jogos quer ver? "); fflush(stdout);
                 if(!readString(line, 100)) {
                     goto err;
                 }
@@ -220,7 +255,7 @@ void DeleteGame(char* input) {
             goto err;
         }
 
-        printf("Insira o ID do jogo: "); fflush(stdout);
+        printf("Insira o identificador do jogo: "); fflush(stdout);
 
         if(!readString(input, 10)) {
             goto err;
@@ -286,12 +321,12 @@ void ShowScoreboard(void) {
     ScoreboardList = ScoreboardListUpdate(ScoreboardList, NULL);
     tmp = ScoreboardList->next; /* Jump over header. FIXME: Need function for this */
 
-    printf("_____________________________________________________________________________\n"
-           "|Pos.|            Nome              |          Localidade          | Pontos |\n"
-           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
+    printf("__________________________________________________________________________________\n"
+           "| Posição |            Nome              |          Localidade          | Pontos |\n"
+           "|^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
     while (!ListIsFooter(tmp)) {
-        TablePrintTeam(i++, (Team*)tmp->data);
+        TablePrintTeam(i++, true, (Team*)tmp->data);
         tmp = ListIterateNext(tmp);
     }
-    printf("-----------------------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------------------------\n");
 }

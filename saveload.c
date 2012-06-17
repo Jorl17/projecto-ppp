@@ -38,7 +38,7 @@ void ReadTeams() {
     char name[NAME_SIZE], location[NAME_SIZE];
     int r;
     size_t count=0;
-    FILE *file = fopen ("teams.txt", "r");
+    FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/teams.txt", "r");
 
     NUM_TEAMS = 0;
 
@@ -80,7 +80,7 @@ void ReadGames() {
     char line[100];
     int r;
     size_t count=0;
-    FILE *file = fopen ("games.txt", "r");
+    FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/games.txt", "r");
     Game tmp;
     Games = ListNew();
     while (readStringFile(line, 100, file)) {
@@ -146,7 +146,7 @@ void ReadGames() {
 
 // Write
 void UpdateGames(void) {
-    FILE *file = fopen ("games.txt", "w");
+    FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/games.txt", "w");
     list_t* node = Games->next;
 
     while (node->next != NULL) {

@@ -1,4 +1,9 @@
 Casa:Benfica
+Fora:Academica
+Data:5/7/1993
+Resultado:23-2
+
+Casa:Benfica
 Fora:FC Porto
 Data:2/3/1994
 Resultado:0-9
@@ -41,7 +46,7 @@ Resultado:1-1
 Casa:Academica
 Fora:FC Portugalete
 Data:2/3/2009
-Resultado:5-255   
+Resultado:5-255
 
 Casa:FC Portugalete
 Fora:Tangerina
@@ -57,6 +62,11 @@ Casa:Real Madrid
 Fora:Carapinheira
 Data:9/3/2011
 Resultado:1-7
+
+Casa:Academica
+Fora:Benfica
+Data:7/8/2011
+Resultado:122-0
 
 Casa:Benfica
 Fora:FC Porto

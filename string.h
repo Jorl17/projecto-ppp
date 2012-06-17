@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "fixsizedtypes.h"
 
@@ -10,3 +11,4 @@ bool strCaseEqualn(char* s1, char* s2, size_t n);
 bool strCaseEqual(char* s1, char* s2);
 void trimString(char* s);
 bool strToResult(char* str, uint8_t* pts1, uint8_t* pts2);
+void toLower(char s[]);

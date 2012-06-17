@@ -3,6 +3,7 @@
 #define ASSERT assert
 #include "Team.h"
 #include "TeamGameList.h"
+#include "string.h"
 
 int TeamGetPoints(Team* team) {
     list_t* tmp;
@@ -84,11 +85,19 @@ void TeamDelGame(Team* team, Game* g) {
     }
 }
 
-Team* TeamFind(char* name) {
+Team* TeamFind(char* _name) {
     int iMax=NUM_TEAMS-1, iMin=0, iMed, compare;
+    char name[NAME_SIZE], copy[NAME_SIZE];
+  
+    strcpy(name, _name);
+    toLower(name);
+  
     while (iMax >= iMin) {
         iMed = (iMax + iMin) / 2;
-        compare = strcmp(Teams[iMed].name,name);
+        strcpy(copy, Teams[iMed].name);
+        toLower(copy);
+      
+        compare = strcmp(copy ,name);
         if (compare < 0) /* A < B */
             iMin = iMed+1;
         else if (compare > 0) /* A > B */

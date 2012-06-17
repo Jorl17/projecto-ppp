@@ -34,6 +34,17 @@ void ListDelete(list_t* list) {
     free(list);
 }
 
+void ListDeleteNoFreeData(list_t* list) {
+    list_t* tmp;
+    ASSERT(list);
+    while ( list->next ) {
+        tmp = list;
+        list = list->next;
+        free(tmp);
+    }
+    free(list);
+}
+
 /*
   Find the first element whose data is "greater than or equal to that" of Key.
   We return that element or the footer, meaning that the returned element

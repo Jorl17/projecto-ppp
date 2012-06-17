@@ -11,34 +11,13 @@
 int main(void) {
     char cmd[NAME_SIZE+1]={0};
     ScoreboardList = NULL;
-    // size_t cmdlen; NOT YET USED
+    size_t i;
 
     /******************************** TESTING STUFF *******************************/
     Team* selectedTeam;
-    /*Teams = (Team*)malloc(3*sizeof(Team));
-    strcpy(Teams[0].name, "AB Porto");
-    strcpy(Teams[0].location, "Porto, Portugal");
-    Teams[0].points = -1;
-    Teams[0].gameList = NULL;
-
-    strcpy(Teams[1].name, "BE Benfica");
-    strcpy(Teams[1].location, "Lisboa, Portugal");
-    Teams[1].points = -1;
-    Teams[1].gameList = NULL;
-
-    strcpy(Teams[2].name, "CD Braga");
-    strcpy(Teams[2].location, "Braga, Portugal");
-    Teams[2].points = -1;
-    Teams[2].gameList = NULL;
-
-    NUM_TEAMS = 3;*/
     ReadFiles();
 
-    /* Triggers ANSI C pedantic warnings, but it's in the testing
-      part, so it's ok. */
-
     LastGameList = NULL;
-    ShowGames();
     /**************************************************************************/
 
     while(true) {
@@ -83,6 +62,11 @@ int main(void) {
 
     /******************************** TESTING *******************************/
     ListDelete(Games);
+    for (i=0; i < NUM_TEAMS; i++)
+        if (Teams[i].gameList)
+            ListDeleteNoFreeData(Teams[i].gameList);
+    if (ScoreboardList)
+        ListDeleteNoFreeData(ScoreboardList);
     free(Teams);
     /************************************************************************/
 

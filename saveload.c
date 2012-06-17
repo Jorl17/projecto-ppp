@@ -73,6 +73,7 @@ void ReadTeams() {
         while((r=fgetc(file))=='\n') count++;
         ungetc(r, file);
     }
+    fclose(file);
 }
 
 void ReadGames() {
@@ -134,43 +135,31 @@ void ReadGames() {
         if (!strToResult(&line[10], &tmp.homePoints, &tmp.awayPoints))
             ERROR_OUT("Erro ao interpretar o resultado na linha %lu. Lido: '%s'", count, line)
 
-        GameListAddGame(Games, tmp);
+        GameListAddGame(Games, tmp, false);
 
         while((r=fgetc(file))=='\n') count++;
         ungetc(r, file);
     }
+
+    fclose(file);
 }
 
 
 // Write
-void UpdateGames(int start) {
-    FILE *file = fopen ("games.txt", "r+");
-    list_t* node = Games;
+void UpdateGames(void) {
+    FILE *file = fopen ("games.txt", "w");
+    list_t* node = Games->next;
 
-    int numLines = start * 5;
-    while (numLines > 0) {
-        int c = fgetc(file);
-
-        if (c == '\n') {
-            numLines--;
-        } else if (c == EOF) {
-            printf("Error, not enough games found on games.txt. The file may have been corrupted.");
-            return;
-        }
-    }
-
-    while (start > 0) {
-        node = node->next;
-        start--;
-    }
-
-    while (node != NULL) {
+    while (node->next != NULL) {
         Game* game = GAMELIST_GAME(node);
 
-        fprintf(file, "%d/%d/%d\n", (int)game->date.day, (int)game->date.month, (int)game->date.year);
-        /*fprintf(file, "%d\n\n", game->outcome);*/
+        fprintf(file,"Casa:%s\nFora:%s\n",game->homeTeam->name, game->awayTeam->name);
+        fprintf(file, "Data:%d/%d/%d\n", (int)game->date.day, (int)game->date.month, (int)game->date.year);
+        fprintf(file,"Resultado:%d-%d\n\n", (int)game->homePoints, (int)game->awayPoints);
 
         node = node->next;
     }
-}
 
+    fclose(file);
+
+}

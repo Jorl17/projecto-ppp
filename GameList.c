@@ -7,12 +7,14 @@
 #include "TeamGameList.h"
 #include "TeamScoreBoardList.h"
 #include "assert.h"
+#include "saveload.h"
+
 #define ASSERT assert
 int compareDatesAux(void* d1, void* d2) {
     return compareDates(((Game*)d1)->date, ((Game*)d2)->date);
 }
 
-list_t* GameListAddGame(list_t* list, Game game) {
+list_t* GameListAddGame(list_t* list, Game game, bool update) {
     Game* g = malloc(sizeof(Game));
     list_t* tmp;
     *g = game;
@@ -26,6 +28,8 @@ list_t* GameListAddGame(list_t* list, Game game) {
         ScoreboardList = ScoreboardListUpdate(ScoreboardList, g);
 
     /* Update file FIXME */
+    if(update)
+        UpdateGames();
     return tmp;
 }
 uint8_t getOutcomeFromGame(Game* g) {

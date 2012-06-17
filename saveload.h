@@ -4,6 +4,6 @@
 void ReadFiles();
 void ReadTeams();
 void ReadGames();
-void UpdateGames(int); // pass the "index" of the game added/removed in the "main" list
+void UpdateGames(void);
 
 #endif /* SAVELOAD_H */

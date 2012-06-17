@@ -7,6 +7,7 @@
 #include "GameList.h"
 #include "Date.h"
 #include "TeamScoreBoardList.h"
+#include "saveload.h"
 
 #define ASSERT assert
 
@@ -162,7 +163,7 @@ void NewGame(const char* input) {
 
     printf("Jogo adicionado!\n");
 
-    tmp=GameListAddGame(Games, game);
+    tmp=GameListAddGame(Games, game, true);
 
 }
 void DeleteGame(const char* input) {
@@ -188,7 +189,9 @@ void DeleteGame(const char* input) {
         ASSERT(g->awayTeam);
         TeamDelGame(g->homeTeam, g);
         TeamDelGame(g->awayTeam, g);
+        ScoreboardListUpdate(ScoreboardList, g);
         ListDel(iter); /* This effectively DELETES the game from memory */
+        UpdateGames();
     } else {
         list_t* tmp;
         iter = LastGameList->next;
@@ -204,6 +207,7 @@ void DeleteGame(const char* input) {
         ASSERT(g->awayTeam);
         TeamDelGame(g->homeTeam, g);
         TeamDelGame(g->awayTeam, g);
+        ScoreboardListUpdate(ScoreboardList, g);
         ListDel(tmp); /* The cool thing here is that tmp is already the ponter to the node!! */
     }
     /* Go to the id-th game in the current gameList (LastGameList or Game if LastGameList==NULL */

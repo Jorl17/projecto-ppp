@@ -24,22 +24,17 @@ void ListDelete(list_t* list);
   them and return -1, 0 or 1 (following strcmp conventions).
  */
 list_t* ListSearch(list_t* list, void* key, compareFunc funct);
-
 void ListDel(list_t* l);
-
 list_t* ListIterateNext(list_t* list);
 /*
   Gets the next element in the list.
  */
 list_t* ListIteratePrev(list_t* list);
-
 bool ListIsHeader(list_t* list);
-
 bool ListIsFooter(list_t* list);
-
 list_t* ListAdd(list_t* list, void* g, compareFunc funct);
-
 list_t* ListFindNode(list_t* list, void* data);
+void ListDeleteNoFreeData(list_t* list);
 
 #define LIST_DATA(list, type) ((type*)list->data)
 #endif /* LIST_T_H */

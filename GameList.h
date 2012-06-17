@@ -19,7 +19,7 @@ struct _Game {
 
 int compareDatesAux(void* d1, void* d2);
 
-list_t* GameListAddGame(list_t* list, Game g);
+list_t* GameListAddGame(list_t* list, Game g, bool update);
 
 uint8_t getOutcomeFromGame(Game* g);
 

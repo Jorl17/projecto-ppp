@@ -38,8 +38,9 @@ void ReadTeams() {
     char name[NAME_SIZE], location[NAME_SIZE];
     int r;
     size_t count=0;
-    FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/teams.txt", "r");
-
+    FILE *file = fopen ("teams.txt", "r");
+    if (!file)
+        ERROR_OUT("Erro ao abrir o ficheiro das equipas.%s","\n");
     NUM_TEAMS = 0;
 
     while (readStringFile(line, 100, file)) {
@@ -80,7 +81,9 @@ void ReadGames() {
     char line[100];
     int r;
     size_t count=0;
-    FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/games.txt", "r");
+    FILE *file = fopen ("games.txt", "r");
+    if (!file)
+        ERROR_OUT("Erro ao abrir o ficheiro dos jogos.%s","\n");
     Game tmp;
     Games = ListNew();
     while (readStringFile(line, 100, file)) {

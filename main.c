@@ -82,8 +82,8 @@ int main(void) {
                    "jogos [x]  - lista todos os jogos, por data, da equipa [x], em que [x] é o nome da equipa.\n"
                    "novo - inicia a adicao de um novo jogo.\n"
                    "apagar [x] - apaga o jogo com o identificador [x] (da listagem mais recente).\n"
-                   "limpeza - activa/desactiva a limpeza de ecra.\n");
-                   "sair - Sai do programa.\n";
+                   "limpeza - activa/desactiva a limpeza de ecra.\n"
+                   "sair - Sai do programa.\n");
         }
         else {
             wrong_command:

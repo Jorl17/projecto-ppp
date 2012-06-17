@@ -5,9 +5,10 @@
 #include "string.h"
 
 void toLower(char s[]) {
-  for (int i = 0; i < strlen(s); i++) {
-    s[i] = tolower(s[i]);
-  }
+    size_t i;
+    for (i = 0; i < strlen(s); i++) {
+        s[i] = tolower(s[i]);
+    }
 }
 
 int flushBuffer(FILE* f) {

@@ -76,7 +76,7 @@ void ShowGames(void) {
     list_t* local;
     size_t c=0;
     printf("________________________________________________________________________________________\n"
-           "|    |        Equipa da Casa        | Res. |       Equipa Visitante       |    Data    |\n"
+           "|    |        Home Team        | Res. |       Away Team       |    Date    |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^|\n");
     /* ex:  |1   |           FC Porto           |V    D|           SL Bosta           |  3/ 4/1994 |\n); */
     if (LastGameList == NULL) {
@@ -138,57 +138,63 @@ void ListTeams(void) {
     printf("------------------------------------------------------------------------\n");
 }
 
+void UnkownTeamError(char str[]) {
+  printf("%s is not a team registered in the championship.\n", str);
+}
+
 void NewGame(const char* input) {
     Game game;
     size_t read;
     char str[NAME_SIZE];
     list_t* tmp;
-    if (*input) {
-        /* User probably passed in the data through the commandline */
-        /* FIXME */
-    } else {
-        game.date=getDateFromUser("Data do jogo?");
-        if (!compareDates(game.date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
-            return ;
 
-        printf("Equipa da Casa? "); fflush(stdout);
-        read = readString(str, NAME_SIZE);
-        if (!read)
-            return ;
+    Home_team:
+    printf("Home team: "); fflush(stdout);
+    read = readString(str, NAME_SIZE);
+    if (!read)
+      goto Home_team;
 
-        else if ( ! (game.homeTeam = getTeamFromInput(str)) )
-            return ;
-
-        printf("Equipa Visitante? "); fflush(stdout);
-        read = readString(str, NAME_SIZE);
-        if (!read)
-            return ;
-
-        else if ( ! (game.awayTeam = getTeamFromInput(str)) )
-            return ;
-
-        if (game.awayTeam==game.homeTeam)
-            return ;
-
-        printf("Resultado (V, E, D da casa)? "); fflush(stdout);
-        read = readString(str, 2);
-        if (*str=='V' || *str == 'v')
-            game.outcome = OUTCOME_HOMEWIN;
-        else if (*str=='E' || *str == 'e')
-            game.outcome = OUTCOME_DRAW;
-        else if (*str=='D' || *str == 'd')
-            game.outcome = OUTCOME_AWAYWIN;
-        else
-            return ;
-
-        printf("Jogo adicionado!\n");
+    else if ( ! (game.homeTeam = getTeamFromInput(str)) ) {
+        UnkownTeamError(str);
+        goto Home_team;
     }
 
-    printGame(0, &game); /* Just here to test. Dummy ID FIXME*/
+    Away_team:
+    printf("Away team: "); fflush(stdout);
+    read = readString(str, NAME_SIZE);
+    if (!read)
+        goto Away_team;
+
+    else if ( ! (game.awayTeam = getTeamFromInput(str)) ) {
+        UnkownTeamError(str);
+        goto Away_team;
+    }
+
+    if (game.awayTeam==game.homeTeam) {
+        printf("Home and away team cannot be the same. Jackass.\n");
+        goto Away_team;
+    }
+      
+    game.date=getDateFromUser("Date: ");
+    if (!compareDates(game.date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
+      return ;
+
+    Result:
+    printf("Result (\"t\", \"v\" or \"d\"  for tie, victory, defeat of home team):"); fflush(stdout);
+    read = readString(str, 2);
+    if (*str=='V' || *str == 'v')
+        game.outcome = OUTCOME_HOMEWIN;
+    else if (*str=='T' || *str == 't')
+        game.outcome = OUTCOME_DRAW;
+    else if (*str=='D' || *str == 'd')
+        game.outcome = OUTCOME_AWAYWIN;
+    else
+        goto Result;
+
 
     tmp=GameListAddGame(Games, game);
-
 }
+
 void DeleteGame(const char* input) {
     list_t* iter;
     Game* g;

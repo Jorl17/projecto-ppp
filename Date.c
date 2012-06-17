@@ -49,7 +49,7 @@ Date getDateFromUser(const char* msg) {
     char* token;
     Date ret;
     if (msg) {
-        printf("%s: ", msg); fflush(stdout);
+        printf("%s", msg); fflush(stdout);
     }
 
     read = readString(str, MAX_DATE_SIZE-2);

@@ -47,16 +47,16 @@ int main(void) {
                 printf("TEAM: %s\n", selectedTeam->name); // FIXME: TESTING
                 ShowGames();
             } else
-                goto wrong_command; // FIXME: 'EVIL' GOTO!
+                goto wrong_command;
         }
         else if ( !strcmp(cmd, "teams") ) {
             ListTeams();
         }
         else if ( !strncmp(cmd, "add", 3) ) {
-            NewGame(&cmd[4]); // 4 = strlen("ADD ")
+            NewGame(&cmd[4]); // 4 = strlen("add ")
         }
         else if ( !strncmp(cmd, "del", 3) ) {
-            DeleteGame(&cmd[3]); // 3 = strlen("DEL")
+            DeleteGame(&cmd[3]); // 3 = strlen("del")
         }
         else if ( !strcmp(cmd, "scores") ) {
             ShowScoreboard();

@@ -35,13 +35,12 @@ void ReadGames() {
     int i = 0, v;
   
     Games = malloc(sizeof(list_t));
-    list_t* prev = NULL;
+    list_t* prev = Games;
 
     while (fscanf(file, "Home: %d\n", &v) == 1) {
         i++;
-        Games = realloc(Games, sizeof(list_t) * i);
 
-        list_t* node = &Games[i];
+        list_t* node = malloc(sizeof(list_t));
         Game* game = GAMELIST_GAME(node);
 
         prev->next = node;

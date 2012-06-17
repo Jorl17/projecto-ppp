@@ -10,7 +10,8 @@
 #define OUTCOME_AWAYWIN 3
 
 struct _Game {
-    uint8_t outcome;
+    uint8_t homePoints;
+    uint8_t awayPoints;
     Date date;
     Team* homeTeam;
     Team* awayTeam;
@@ -19,6 +20,8 @@ struct _Game {
 int compareDatesAux(void* d1, void* d2);
 
 list_t* GameListAddGame(list_t* list, Game g);
+
+uint8_t getOutcomeFromGame(Game* g);
 
 extern list_t*  Games;        /* Has all games ordered by date */
 extern list_t*  LastGameList; /* Points to the last listed game list. FIXME: it isn't a GameList*/

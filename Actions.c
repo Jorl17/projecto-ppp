@@ -10,35 +10,22 @@
 
 #define ASSERT assert
 
-Team* getTeamFromInput(const char* input) {
-    int iMax=NUM_TEAMS-1, iMin=0, iMed, compare;
+Team* getTeamFromInput(char* input) {
     ASSERT(input);
     if ( isStrNumber(input) ) {
         size_t i = (size_t)atoi(input);
         if (i < NUM_TEAMS)
             return &Teams[i];
     }
-    /* input must have the team name. FIXME. Trim string (remove whitespace)*/
-    while (iMax >= iMin) {
-        iMed = (iMax + iMin) / 2;
-        compare = strcmp(Teams[iMed].name,input);
-        if (compare < 0) /* A < B */
-            iMin = iMed+1;
-        else if (compare > 0) /* A > B */
-            iMax = iMed-1;
-        else
-            return &Teams[iMed];
-    }
-
-    /** If all else fails... **/
-    return NULL;
+    /* input must have the team name.*/
+    trimString(input);
+    return TeamFind(input);
 }
 
 void printGame(size_t id, Game* game) {
     size_t j, len;
     ASSERT(game); ASSERT(game->homeTeam); ASSERT(game->awayTeam);
     ASSERT(compareDates(game->date,DATEMIN)); ASSERT(compareDates(game->date,DATEMAX));
-    ASSERT(game->outcome == OUTCOME_HOMEWIN || game->outcome == OUTCOME_AWAYWIN || game->outcome == OUTCOME_DRAW);
     printf("|%-4lu", id);
     /** Print Home Team Name centered **/
     printf("|");
@@ -50,12 +37,8 @@ void printGame(size_t id, Game* game) {
     for (; j <= 30; j++)
         printf(" ");
 
-    if (game->outcome == OUTCOME_HOMEWIN)
-        printf("|V    D|");
-    else if (game->outcome == OUTCOME_AWAYWIN)
-        printf("|D    V|");
-    else
-        printf("|E    E|");
+
+    printf("|%3d - %-3u|", game->homePoints, game->awayPoints);
 
     /** Print Away Team Name centered **/
     len = strlen(game->awayTeam->name);
@@ -75,10 +58,10 @@ void printGame(size_t id, Game* game) {
 void ShowGames(void) {
     list_t* local;
     size_t c=0;
-    printf("________________________________________________________________________________________\n"
-           "| id |        Equipa da Casa        | Res. |       Equipa Visitante       |    Data    |\n"
-           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^|\n");
-    /* ex:  |1   |           FC Porto           |V    D|           SL Bosta           |  3/ 4/1994 |\n); */
+    printf("___________________________________________________________________________________________\n"
+           "| id |        Equipa da Casa        |  Resu.  |       Equipa Visitante       |    Data    |\n"
+           "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^|\n");
+    /* ex:  |1   |           FC Porto           |xxx - yyy|           SL Bosta           |  3/ 4/1994 |\n); */
     if (LastGameList == NULL) {
         local = Games->next;
         while(local->next) {
@@ -94,7 +77,7 @@ void ShowGames(void) {
             }
         }
     }
-    printf("----------------------------------------------------------------------------------------\n");
+    printf("-------------------------------------------------------------------------------------------\n");
 }
 
 void TablePrintTeam(size_t i, Team* t) {
@@ -142,6 +125,7 @@ void NewGame(const char* input) {
     Game game;
     size_t read;
     char str[NAME_SIZE];
+    char* token;
     list_t* tmp;
     if (*input) {
         /* User probably passed in the data through the commandline */
@@ -170,21 +154,13 @@ void NewGame(const char* input) {
         if (game.awayTeam==game.homeTeam)
             return ;
 
-        printf("Resultado (V, E, D da casa)? "); fflush(stdout);
-        read = readString(str, 2);
-        if (*str=='V' || *str == 'v')
-            game.outcome = OUTCOME_HOMEWIN;
-        else if (*str=='E' || *str == 'e')
-            game.outcome = OUTCOME_DRAW;
-        else if (*str=='D' || *str == 'd')
-            game.outcome = OUTCOME_AWAYWIN;
-        else
+        printf("Resultado (pts-pts)? "); fflush(stdout);
+        read = readString(str, NAME_SIZE);
+        if (!strToResult(str, &game.homePoints, &game.awayPoints))
             return ;
-
-        printf("Jogo adicionado!\n");
     }
 
-    printGame(0, &game); /* Just here to test. Dummy ID FIXME*/
+    printf("Jogo adicionado!\n");
 
     tmp=GameListAddGame(Games, game);
 
@@ -242,7 +218,7 @@ void ShowScoreboard(void) {
     tmp = ScoreboardList->next; /* Jump over header. FIXME: Need function for this */
 
     printf("_____________________________________________________________________________\n"
-           "| id |            Nome              |          Localidade          | Pontos |\n"
+           "|Pos.|            Nome              |          Localidade          | Pontos |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^|\n");
     while (!ListIsFooter(tmp)) {
         TablePrintTeam(i++, (Team*)tmp->data);

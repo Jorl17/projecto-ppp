@@ -6,6 +6,8 @@
 #include "Team.h"
 #include "TeamGameList.h"
 #include "TeamScoreBoardList.h"
+#include "assert.h"
+#define ASSERT assert
 int compareDatesAux(void* d1, void* d2) {
     return compareDates(((Game*)d1)->date, ((Game*)d2)->date);
 }
@@ -25,4 +27,13 @@ list_t* GameListAddGame(list_t* list, Game game) {
 
     /* Update file FIXME */
     return tmp;
+}
+uint8_t getOutcomeFromGame(Game* g) {
+    ASSERT(g);
+    if (g->homePoints > g->awayPoints)
+        return OUTCOME_HOMEWIN;
+    else if (g->homePoints < g->awayPoints)
+        return OUTCOME_AWAYWIN;
+    else
+        return OUTCOME_DRAW;
 }

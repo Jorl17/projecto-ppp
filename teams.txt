@@ -1,8 +1,26 @@
-Name: Carapinheira
-Location: Carapinheira
+Nome: Academica
+Localidade:   Coimbra
 
-Name: Academica
-Location: Coimbra
+Nome: Carapinheira
+Localidade:          Carapinheira City
 
-Name: Benfica
-Location: Lisboa
+Nome: Benfica
+Localidade: Lisboa
+
+Nome: Tangerina
+Localidade: Banana, Republic.
+
+Nome: 1 For All
+Localidade:Lisboa, bostagal
+
+Nome: FC Porto
+Localidade:Porto, Portugal
+
+Nome: FC Portugalete
+Localidade:Portugalete, Espanha
+
+Nome: Real Madrid
+Localidade:Madrid, Espanha
+
+Nome: Sporting CP
+Localidade:Lisboa, Portugal

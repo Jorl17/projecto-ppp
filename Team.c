@@ -25,19 +25,21 @@ int TeamGetPoints(Team* team) {
 
 void TeamPointsUpdateWithGame(Team* team, Game* game, bool remove) {
     int pts=0;
+    uint8_t outcome;
     ASSERT(team);
     ASSERT(game);
+    outcome = getOutcomeFromGame(game);
     if (game->homeTeam == team) {
         // We play home
-        if ( game->outcome == OUTCOME_HOMEWIN)
+        if ( outcome == OUTCOME_HOMEWIN)
             pts = 3;
-        else if (game->outcome == OUTCOME_DRAW)
+        else if (outcome == OUTCOME_DRAW)
             pts = 1;
     } else {
         // We play away
-        if ( game->outcome == OUTCOME_AWAYWIN)
+        if ( outcome == OUTCOME_AWAYWIN)
             pts = 3;
-        else if (game->outcome == OUTCOME_DRAW)
+        else if (outcome == OUTCOME_DRAW)
             pts = 1;
     }
 
@@ -79,4 +81,20 @@ void TeamDelGame(Team* team, Game* g) {
         if (team->points != -1)
             TeamPointsUpdateWithGame(team, g, true);
     }
+}
+
+Team* TeamFind(char* name) {
+    int iMax=NUM_TEAMS-1, iMin=0, iMed, compare;
+    while (iMax >= iMin) {
+        iMed = (iMax + iMin) / 2;
+        compare = strcmp(Teams[iMed].name,name);
+        if (compare < 0) /* A < B */
+            iMin = iMed+1;
+        else if (compare > 0) /* A > B */
+            iMax = iMed-1;
+        else
+            return &Teams[iMed];
+    }
+
+    return NULL;
 }

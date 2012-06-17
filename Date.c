@@ -41,25 +41,9 @@ void printDate(Date d, bool longFormat) {
 Date DATEMAX = {(uint8_t)-1, (uint8_t)-1, (unsigned int)-1};
 Date DATEMIN = {0,0,0};
 
-Date getDateFromUser(const char* msg) {
-#define MAX_DATE_SIZE 12 /* dd/mm/aaaa 0 -- the extra space has an explanation below.*/
-#define MIN_DATE_CHARACTERS 6/* d/m/aa\0 */
-    size_t read;
-    char str[MAX_DATE_SIZE];
+Date getDateFromInput(char* str) {
     char* token;
     Date ret;
-    if (msg) {
-        printf("%s: ", msg); fflush(stdout);
-    }
-
-    read = readString(str, MAX_DATE_SIZE-2);
-    /* Add a space at the end because of strtok() eating it up as if it were a token */
-    str[read]=' ';
-    str[read+1]='\0';
-
-    if (read < MIN_DATE_CHARACTERS)
-        goto err;
-
     token = strtok(str, "/");
     if (!token)
         goto err;
@@ -83,6 +67,26 @@ Date getDateFromUser(const char* msg) {
 
     err:
     return DATEMIN;
+}
+
+Date getDateFromUser(const char* msg) {
+#define MAX_DATE_SIZE 12 /* dd/mm/aaaa\0.*/
+#define MIN_DATE_CHARACTERS 5/* d/m/a\0 */
+    size_t read;
+    char str[MAX_DATE_SIZE];
+    if (msg) {
+        printf("%s: ", msg); fflush(stdout);
+    }
+
+    read = readString(str, MAX_DATE_SIZE);
+    /* Add a space at the end because of strtok() eating it up as if it were a token */
+    //str[read]=' ';
+    //str[read+1]='\0';
+
+    if (read < MIN_DATE_CHARACTERS)
+        return DATEMIN;
+
+    return getDateFromInput(str);
 }
 
 /*

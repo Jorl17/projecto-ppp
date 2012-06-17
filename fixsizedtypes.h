@@ -1,9 +1,9 @@
 #ifndef FIXSIZEDTYPES_H
 #define FIXSIZEDTYPES_H 1
-typedef char uint8_t;
+typedef unsigned char uint8_t;
 
 // For Boolean Types
-typedef char bool;
+typedef unsigned char bool;
 #define true  (!0)
 #define false  (0)
 

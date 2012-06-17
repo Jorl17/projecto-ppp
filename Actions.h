@@ -1,6 +1,6 @@
 #include "datatypes.h" // Team*, Game* (last one is forward declared)
 
-Team* getTeamFromInput(const char*);
+Team* getTeamFromInput(char* input);
 void printGame(unsigned int, Game*);
 void ShowGames(void);
 void ListTeams(void);

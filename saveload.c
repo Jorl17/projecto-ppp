@@ -149,7 +149,9 @@ void ReadGames() {
 
 // Write
 void UpdateGames(void) {
-    FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/games.txt", "w");
+    FILE *file = fopen ("games.txt", "w");
+    if (!file)
+        ERROR_OUT("Erro ao abrir o ficheiro dos jogos.%s","\n");
     list_t* node = Games->next;
 
     while (node->next != NULL) {

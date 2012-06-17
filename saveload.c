@@ -15,7 +15,6 @@ void ReadFiles() {
 void ReadTeams() {
 	FILE *file = fopen ("/Users/Jaliborc/Documents/Disciplinas/PPP/Projecto/Projecto/teams.txt", "r");
   char name[NAME_SIZE];
-  int NUM_TEAMS = 0;
   
   Teams = malloc(sizeof(Team));
   NUM_TEAMS = 0;

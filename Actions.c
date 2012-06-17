@@ -7,7 +7,7 @@
 #include "TeamGameList.h"
 #include "GameList.h"
 #include "Date.h"
-#include "TeamScoreBoardList.h"
+#include "ScoreBoardList.h"
 #include "saveload.h"
 #include "Actions.h"
 

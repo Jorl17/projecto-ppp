@@ -1,4 +1,4 @@
-#include "TeamScoreBoardList.h"
+#include "ScoreBoardList.h"
 #include "Team.h"
 #include "fixsizedtypes.h"
 #include <assert.h>

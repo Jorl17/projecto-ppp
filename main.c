@@ -7,7 +7,7 @@
 #include "GameList.h"         //  GameList, Game
 #include "Team.h"
 #include "TeamGameList.h"
-#include "TeamScoreBoardList.h"
+#include "ScoreBoardList.h"
 #include "saveload.h"
 
 void cleanup(void) {

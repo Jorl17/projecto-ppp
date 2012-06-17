@@ -16,19 +16,6 @@ list_t* TeamGameListAdd(list_t* list, list_t* g) {
     return ListAdd(list, (void*)g, &compareDatesFromNodeAux);
 }
 
-/*
-list_t* TeamGameListFindGamelistNode(list_t* list, list_t* node) {
-    list = list->next;
-    while(!ListIsFooter(list)) {
-        if (compareGamesAux(list->data, (void*)node))
-            return list;
-
-        list = ListIterateNext();
-    }
-
-    return NULL;
-}
-*/
 list_t* TeamGameListAppend(list_t* list, list_t* g) {
     list_t* newNode = (list_t*)malloc(sizeof(list_t));
     while (!ListIsFooter(list->next)) list = ListIterateNext(list);
@@ -44,7 +31,6 @@ list_t* TeamGameListAppend(list_t* list, list_t* g) {
 
 ////
 // This function is specific because list_t does not actually create content.
-// FIXME: NOT USED YET!!!
 //
 void TeamGameListDel(list_t* l) {
     ASSERT(l);
@@ -55,7 +41,6 @@ void TeamGameListDel(list_t* l) {
 
 ////
 // Alias for the above, but uses a game (hence, has to find the node that has it)
-// FIXME: NOT USED YET!!!
 //
 void TeamGameListDelGame(list_t* list, Game* g) {
     ASSERT(list);

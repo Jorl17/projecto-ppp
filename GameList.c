@@ -5,7 +5,7 @@
 #include "list_t.h"
 #include "Team.h"
 #include "TeamGameList.h"
-#include "TeamScoreBoardList.h"
+#include "ScoreBoardList.h"
 #include "assert.h"
 #include "saveload.h"
 

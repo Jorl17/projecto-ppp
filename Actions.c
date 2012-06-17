@@ -146,7 +146,7 @@ void TeamNameError(char str[]) {
   printf("%s não é uma equipa registada no campeonato.\n\n", str);
 }
 
-void RequestPoints(char msg[], u_int8_t* points) {
+void RequestPoints(char msg[], uint8_t* points) {
   char str[NAME_SIZE];
   size_t read;
   

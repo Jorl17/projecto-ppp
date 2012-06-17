@@ -1,7 +1,7 @@
 #ifndef TEAMGAMELIST_H
 #define TEAMGAMELIST_H 1
 #include "GameList.h"    /* list_t */
-
+extern list_t*  LastGameList; /* Points to the last listed game list.*/
 
 int compareDatesFromNodeAux(void* d1, void* d2);
 list_t* TeamGameListAdd(list_t* list, list_t* g);

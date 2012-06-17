@@ -4,6 +4,7 @@
 #include "string.h" /* isStrNumber(),readString() */
 #include "datatypes.h"
 #include "Team.h"
+#include "TeamGameList.h"
 #include "GameList.h"
 #include "Date.h"
 #include "TeamScoreBoardList.h"

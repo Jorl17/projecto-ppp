@@ -85,7 +85,7 @@ void TeamDelGame(Team* team, Game* g) {
     }
 }
 
-Team* TeamFind(char* _name) {
+Team* TeamFind(const char* _name) {
     int iMax=NUM_TEAMS-1, iMin=0, iMed, compare;
     char name[NAME_SIZE], copy[NAME_SIZE];
   

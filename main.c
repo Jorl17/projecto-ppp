@@ -6,6 +6,7 @@
 #include "Actions.h"          //  All actions
 #include "GameList.h"         //  GameList, Game
 #include "Team.h"
+#include "TeamGameList.h"
 #include "TeamScoreBoardList.h"
 #include "saveload.h"
 

@@ -12,7 +12,7 @@ void TeamPointsUpdateWithGame(Team* team, Game* game, bool remove);
 void TeamUpdateGameListCache(Team* team, list_t* gameNode);
 int TeamGetPoints(Team* team);
 void TeamDelGame(Team* team, Game* g);
-Team* TeamFind(char* name);
+Team* TeamFind(const char* _name);
 
 extern Team*      Teams;        /* All teams, ordered alphabetically */
 extern size_t     NUM_TEAMS;

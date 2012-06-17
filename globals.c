@@ -10,8 +10,8 @@ list_t*  ScoreboardList; // Has teams in scoreboard order
 bool     ClearScreen;   // Should we clear the screen some times?
 
 Game NULL_GAME = {
-    0, 0,// outcome
+    0, 0,    // outcome
     {0,0,0}, // date
-    NULL, // home team
-    NULL // home team
+    NULL,    // home team
+    NULL     // home team
 };

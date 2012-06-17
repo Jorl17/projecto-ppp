@@ -139,7 +139,7 @@ void ListTeams(void) {
 }
 
 void UnkownTeamError(char str[]) {
-  printf("%s is not a team registered in the championship.\n", str);
+  printf("%s is not a team registered in the championship.\n\n", str);
 }
 
 void NewGame(const char* input) {
@@ -171,16 +171,19 @@ void NewGame(const char* input) {
     }
 
     if (game.awayTeam==game.homeTeam) {
-        printf("Home and away team cannot be the same. Jackass.\n");
+        printf("Home and away team cannot be the same. Jackass.\n\n");
         goto Away_team;
     }
       
+    Date:
     game.date=getDateFromUser("Date: ");
-    if (!compareDates(game.date,DATEMIN)) /* If they're equal, then compareDates returns 0 */
-      return ;
+    if (!compareDates(game.date,DATEMIN)) {
+      printf("Unacceptable date. The format is d/m/yyyy.\n\n");
+      goto Date;
+    }
 
-    Result:
     printf("Result (\"t\", \"v\" or \"d\"  for tie, victory, defeat of home team):"); fflush(stdout);
+    Result:
     read = readString(str, 2);
     if (*str=='V' || *str == 'v')
         game.outcome = OUTCOME_HOMEWIN;
@@ -188,9 +191,10 @@ void NewGame(const char* input) {
         game.outcome = OUTCOME_DRAW;
     else if (*str=='D' || *str == 'd')
         game.outcome = OUTCOME_AWAYWIN;
-    else
+    else {
+        printf("\nOnly \"v\", \"t\" or \"d\" are accepted options:");
         goto Result;
-
+    }
 
     tmp=GameListAddGame(Games, game);
 }

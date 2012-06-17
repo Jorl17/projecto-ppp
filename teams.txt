@@ -1,9 +1,7 @@
 Nome: Academica
 Localidade:   Coimbra
-
 Nome: Carapinheira
 Localidade:          Carapinheira City
-
 Nome: Benfica
 Localidade: Lisboa
 

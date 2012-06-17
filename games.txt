@@ -1,9 +1,4 @@
 Casa:Benfica
-Fora:Academica
-Data:5/7/1993
-Resultado:23-2
-
-Casa:Benfica
 Fora:FC Porto
 Data:2/3/1994
 Resultado:0-9
@@ -25,13 +20,23 @@ Resultado:1-9
 
 Casa:Benfica
 Fora:FC Porto
-Data:           2/12/1994
+Data:2/12/1994
 Resultado:1-9
+
+Casa:Tangerina
+Fora:Academica
+Data:30/12/1994
+Resultado:2-1
 
 Casa:Benfica
 Fora:FC Porto
 Data:6/7/1995
 Resultado:1-9
+
+Casa:Tangerina
+Fora:Academica
+Data:29/2/1996
+Resultado:1-1
 
 Casa:FC Porto
 Fora:Benfica
@@ -67,6 +72,11 @@ Casa:Academica
 Fora:Benfica
 Data:7/8/2011
 Resultado:122-0
+
+Casa:FC Porto
+Fora:Benfica
+Data:5/7/2012
+Resultado:20-0
 
 Casa:Benfica
 Fora:FC Porto

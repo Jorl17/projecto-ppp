@@ -12,7 +12,8 @@
 
 void cleanup(void) {
     size_t i;
-    ListDelete(Games);
+    if(Games)
+        ListDelete(Games);
     for (i=0; i < NUM_TEAMS; i++)
         if (Teams[i].gameList)
             ListDeleteNoFreeData(Teams[i].gameList);
@@ -27,6 +28,8 @@ int main(void) {
     ScoreboardList = NULL;
     LastGameList = NULL;
     ClearScreen = false;
+    Games = NULL;
+    Teams = NULL;
     ReadFiles();
   
     atexit(&cleanup); fflush(stdout);
@@ -37,7 +40,7 @@ int main(void) {
             printf("\n>>> ");; fflush(stdout);
         } while ( !readString(cmd, NAME_SIZE) );
         printf("\n");
-
+        trimString(cmd);
         if ( strCaseEqual(cmd, "sair") )
             break;
         else if ( strCaseEqualn(cmd, "jogos", 5) ) {
@@ -77,14 +80,14 @@ int main(void) {
             if(ClearScreen)
                 clearScreen();
             printf("Comandos:\n"
-                   "equipas - lista todas as equipas do campeonato.\n"
-                   "pontos - lista todas as equipas, ordenadas por classificação.\n"
-                   "jogos - lista todos os jogos, por data.\n"
-                   "jogos [x]  - lista todos os jogos, por data, da equipa [x], em que [x] é o nome da equipa.\n"
-                   "novo - inicia a adicao de um novo jogo.\n"
+                   "equipas    - lista todas as equipas do campeonato.\n"
+                   "pontos     - lista todas as equipas, ordenadas por classificacao.\n"
+                   "jogos      - lista todos os jogos, por data.\n"
+                   "jogos [x]  - lista todos os jogos, por data, da equipa [x], em que [x] e o nome da equipa ou o seu id (0-(n-1)).\n"
+                   "novo       - inicia a adicao de um novo jogo.\n"
                    "apagar [x] - apaga o jogo com o identificador [x] (da listagem mais recente).\n"
-                   "limpeza - activa/desactiva a limpeza de ecra.\n"
-                   "sair - Sai do programa.\n");
+                   "limpeza    - activa/desactiva a limpeza de ecra.\n"
+                   "sair       - Sai do programa.\n");
         }
         else {
             wrong_command:

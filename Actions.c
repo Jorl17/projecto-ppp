@@ -27,13 +27,13 @@ void clearScreen(void) {
 
 Team* getTeamFromInput(char* input) {
     ASSERT(input);
+    trimString(input);
     if ( isStrNumber(input) ) {
         size_t i = (size_t)atoi(input);
         if (i < NUM_TEAMS)
             return &Teams[i];
     }
     /* input must have the team name.*/
-    trimString(input);
     return TeamFind(input);
 }
 
@@ -150,21 +150,22 @@ void TeamNameError(char str[]) {
 void RequestPoints(char msg[], uint8_t* points) {
   char str[NAME_SIZE];
   size_t read;
+  int pts;
   
   Points:
   printf("%s", msg); fflush(stdout);
   read = readString(str, NAME_SIZE);
   if (!read) {
-    printf("O valor tem de ser um número.\n\n");
+    printf("O valor tem de ser um número (limite de 255 pontos).\n\n");
     goto Points;
   }
   
-  if (!isStrNumber(str)) {
-    printf("O valor tem de ser um número.\n\n");
+  if (!isStrNumber(str) || (pts = atoi(str))>255 ) { /* ANSI C ensures us that the conditions will be evaluated in this order */
+    printf("O valor tem de ser um número (limtie de 255 pontos).\n\n");
     goto Points;
   }
   
-  *points = atoi(str);
+  *points = pts;
 }
 
 void NewGame(void) {

@@ -1,10 +1,10 @@
 #ifndef GAMELIST_H
 #define GAMELIST_H 1
 #include "fixsizedtypes.h" /* bool */
-#include "datatypes.h" /* GameList*, Game* (both forward declared) */
-#include "Date.h"      /* Date */
-#include "list_t.h"    /* list_t */
-#include "Team.h"      /* Team* */
+#include "datatypes.h"     /* GameList*, Game* (both forward declared) */
+#include "Date.h"          /* Date */
+#include "list_t.h"        /* list_t */
+#include "Team.h"          /* Team* */
 #define OUTCOME_HOMEWIN 1
 #define OUTCOME_DRAW    2
 #define OUTCOME_AWAYWIN 3

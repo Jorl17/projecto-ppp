@@ -27,7 +27,6 @@ list_t* GameListAddGame(list_t* list, Game game, bool update) {
     if(ScoreboardList)
         ScoreboardList = ScoreboardListUpdate(ScoreboardList, g);
 
-    /* Update file FIXME */
     if(update)
         WriteGames();
     return tmp;

@@ -1,4 +1,5 @@
 #include <stdlib.h> /* NULL, free(), malloc() */
+#include <stdio.h>  /* printf, for error handling */
 #include <assert.h>
 #define ASSERT assert
 #include "list_t.h"
@@ -61,8 +62,7 @@ list_t* ListSearch(list_t* list, void* key, compareFunc funct) {
 
     while ( list->next ) { /* While we haven't reached the footer */
 
-        compareOutcome = /*compareDates(list->game.date, key->date) ;*/
-                         funct(list->data, key);
+        compareOutcome = funct(list->data, key);
 
         /* If we finally find an element whose data is bigger than ours or equal,
           then, to keep order, we must be inserted right before it. Our search
@@ -99,8 +99,8 @@ list_t* ListAdd(list_t* list, void* g, compareFunc funct) {
 
     node = (list_t*) malloc(sizeof(list_t));
     if ( !node ) {
-        /* FIXME: No more memory -- do something? */
-        return NULL;
+        printf("No more memory.\n");
+        exit(0);
     }
 
     nodeToBeAfterNew = ListSearch(list, g, funct);
@@ -124,12 +124,12 @@ list_t* ListIteratePrev(list_t* list) {
 
 bool ListIsHeader(list_t* list) {
     ASSERT(list);
-    return list->prev==NULL;
+    return !list->prev;
 }
 
 bool ListIsFooter(list_t* list) {
     ASSERT(list);
-    return list->next == NULL;
+    return !list->next;
 }
 
 list_t* ListFindNode(list_t* list, void* data) {

@@ -31,7 +31,8 @@ list_t* ScoreboardListUpdate(list_t* list, Game* game) {
         Team* homeTeam;
         Team* awayTeam;
         list_t* tmpNode;
-        /* Find the teams in game and readd them */
+        /* Find the teams in game and readd them (since their points have been
+           updated.*/
         ASSERT(game->homeTeam);
         ASSERT(game->awayTeam);
         homeTeam = game->homeTeam;

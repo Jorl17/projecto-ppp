@@ -1,5 +1,5 @@
 #include "TeamGameList.h"
-#include "GameList.h" /* compareDatesAux() */
+#include "GameList.h"     /* compareDatesAux() */
 #include <assert.h>
 #define ASSERT assert
 
@@ -29,9 +29,9 @@ list_t* TeamGameListAppend(list_t* list, list_t* g) {
     return newNode;
 }
 
-////
-// This function is specific because list_t does not actually create content.
-//
+/****
+** This function is specific because list_t does not actually create content.
+*/
 void TeamGameListDel(list_t* l) {
     ASSERT(l);
     l->prev->next = l->next;
@@ -39,9 +39,9 @@ void TeamGameListDel(list_t* l) {
     free(l);
 }
 
-////
-// Alias for the above, but uses a game (hence, has to find the node that has it)
-//
+/****
+** Alias for the above, but uses a game (hence, has to find the node that has it)
+*/
 void TeamGameListDelGame(list_t* list, Game* g) {
     ASSERT(list);
     ASSERT(g);

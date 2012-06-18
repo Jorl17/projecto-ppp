@@ -79,9 +79,6 @@ Date getDateFromUser(const char* msg) {
     }
 
     read = readString(str, MAX_DATE_SIZE);
-    /* Add a space at the end because of strtok() eating it up as if it were a token */
-    //str[read]=' ';
-    //str[read+1]='\0';
 
     if (read < MIN_DATE_CHARACTERS)
         return DATEMIN;

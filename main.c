@@ -1,14 +1,14 @@
-#include <stdio.h>            // printf(), fflush()
-#include <stdlib.h>           //  malloc(), free()
-#include <string.h>           //  strcmp(), strncmp()
-#include "string.h" //  readString()
-#include "datatypes.h"        //  Team*
-#include "Actions.h"          //  All actions
-#include "GameList.h"         //  GameList, Game
-#include "Team.h"
-#include "TeamGameList.h"
-#include "ScoreBoardList.h"
-#include "saveload.h"
+#include <stdio.h>            /* printf(), fflush() */
+#include <stdlib.h>           /*  malloc(), free()  */
+#include <string.h>           /*  strcmp(), strncmp() */
+#include "string.h"           /*  readString(), trimString() */
+#include "datatypes.h"        /*  Team* */
+#include "Actions.h"          /*  All actions */
+#include "GameList.h"         /*  GameList, Game */
+#include "Team.h"             /* Team functions */
+#include "TeamGameList.h"     /* LastGameList */
+#include "ScoreBoardList.h"   /* ScoreBoardList */
+#include "saveload.h"         /* ReadFiles() */
 
 void cleanup(void) {
     size_t i;
@@ -23,22 +23,21 @@ void cleanup(void) {
 }
 
 int main(void) {
-    char cmd[NAME_SIZE+1]={0};
+    char cmd[100]={0};
     Team* selectedTeam;
     ScoreboardList = NULL;
     LastGameList = NULL;
     ClearScreen = false;
-    Games = NULL;
+    Games = NULL; /* Needs to start at NULL in case ReadFiles fails and cleanup is called */
     Teams = NULL;
+    atexit(&cleanup);
     ReadFiles();
-  
-    atexit(&cleanup); fflush(stdout);
     printf("Bem vindo ao administrador de campeonatos! Escreva \"ajuda\" para mais informação.\n");
 
     while(true) {
         do {
             printf("\n>>> ");; fflush(stdout);
-        } while ( !readString(cmd, NAME_SIZE) );
+        } while ( !readString(cmd, 100) );
         printf("\n");
         trimString(cmd);
         if ( strCaseEqual(cmd, "sair") )

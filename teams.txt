@@ -1,18 +1,24 @@
+Nome: FC Porto
+Localidade:Porto, Portugal   
+Nome: SC Braga
+Localidade:  Braga, Portugal
+
+
+
+
+
 Nome: Academica
-Localidade:   Coimbra
+Localidade:   Coimbra, Portugal
 Nome: Carapinheira
 Localidade:          Carapinheira City
 Nome: Benfica
-Localidade: Lisboa
+Localidade: Lisboa, Portugal
 
 Nome: Tangerina
-Localidade: Banana, Republic.
+Localidade: Banana, Republic
 
-Nome: 1 For All
-Localidade:Lisboa, bostagal
-
-Nome: FC Porto
-Localidade:Porto, Portugal
+Nome: 1 For All nome com 30 caracte.
+Localidade:Teste, Testyvilla, Republica 2
 
 Nome: FC Portugalete
 Localidade:Portugalete, Espanha

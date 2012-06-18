@@ -6,13 +6,18 @@
 #include "saveload.h"
 #include "string.h"
 
+/* In case somebody wants to be really strict about C standards, we use this here. */
+#if defined(__STDC_VERSION__) && __STDC_VERSION__>=199901L
 #define ERROR_OUT(msg, ...) do {printf("ERROR: " msg "\n" , __VA_ARGS__); fclose(file); exit(-1);} while(0)
+#else
+#define ERROR_OUT(msg, x, y) do {printf("ERROR: " msg "\n" , x, y); fclose(file); exit(-1);} while(0)
+#endif
 
-// Read
+/* Read */
 void ReadFiles() {
     ReadTeams();
     ReadGames();
-};
+}
 
 
 static void InsertTeamOrdered(char* name, char* location) {
@@ -20,12 +25,15 @@ static void InsertTeamOrdered(char* name, char* location) {
     Teams = realloc(Teams, sizeof(Team) * (NUM_TEAMS+1));
     for (i=0; i < NUM_TEAMS; i++) {
         if (strcmp(Teams[i].name, name)>=0) {
-            //at i-1
+            /* We have to insert ourselves right here, at i, so move whatever's
+              left.
+             */
             memmove(&Teams[i+1], &Teams[i], sizeof(Team)*(NUM_TEAMS-i));
             break;
         }
     }
-
+    /* Notice that if we reach the end, then i is NUM_TEAMS, which is where
+      we want to go if we're meant to be the last team. */
     Teams[i].points = -1;
     Teams[i].gameList = NULL;
     strcpy(Teams[i].name, name);
@@ -40,7 +48,7 @@ void ReadTeams() {
     size_t count=0;
     FILE *file = fopen ("teams.txt", "r");
     if (!file)
-        ERROR_OUT("Não foi possível abir o ficheiro das equipas.%s","\n");
+        ERROR_OUT("Não foi possível abir o ficheiro das %s%s","equipas", ".");
     NUM_TEAMS = 0;
 
     while (readStringFile(line, 100, file)) {
@@ -49,21 +57,21 @@ void ReadTeams() {
             ERROR_OUT("Erro ao encontrar o nome da equipa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[5]);
-        if (strlen(&line[5]) >= NAME_SIZE-1)
+        if (strlen(&line[5]) > NAME_SIZE-1)
                     ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line);
 
         strcpy(name, &line[5]);
 
 
         if ((r=readStringFile(line, 100, file)) == 0)
-            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma localidade). na linha %lu", count);
+            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma localidade). na linha %lu%s", count, ".");
         count++;
 
         if (!strCaseEqualn(line, "Localidade:",11))
             ERROR_OUT("Erro ao encontrar a localidade da equipa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[11]);
-        if (strlen(&line[11]) >= NAME_SIZE-1)
+        if (strlen(&line[11]) > NAME_SIZE-1)
             ERROR_OUT("Localidade de equipa demasiado longa na linha %lu. Lido; '%s'", count, line);
 
         strcpy(location, &line[11]);
@@ -81,10 +89,11 @@ void ReadGames() {
     char line[100];
     int r;
     size_t count=0;
-    FILE *file = fopen ("games.txt", "r");
-    if (!file)
-        ERROR_OUT("Não foi possível abir o ficheiro dos jogos.%s","\n");
+    FILE *file;
     Game tmp;
+    file = fopen ("games.txt", "r");
+    if (!file)
+        ERROR_OUT("Não foi possível abir o ficheiro dos %s%s","jogos", ".");
     Games = ListNew();
     while (readStringFile(line, 100, file)) {
         count++;
@@ -92,7 +101,7 @@ void ReadGames() {
             ERROR_OUT("Erro ao encontrar o nome da equipa da casa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[5]);
-        if (strlen(&line[5]) >= NAME_SIZE-1)
+        if (strlen(&line[5]) > NAME_SIZE-1)
             ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line);
 
         tmp.homeTeam=TeamFind(&line[5]);
@@ -100,14 +109,14 @@ void ReadGames() {
             ERROR_OUT("Nome de equipa não encontrado (ou inválido) na linha %lu. Lido: '%s'", count, line);
 
         if ((r=readStringFile(line, 100, file)) == 0)
-            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma equipa). na linha %lu", count);
+            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma equipa). na linha %lu%s", count, ".");
         count++;
 
         if (!strCaseEqualn(line, "Fora:",5))
             ERROR_OUT("Erro ao encontrar a localidade da equipa na linha %lu. Lido: '%s'", count, line);
 
         trimString(&line[5]);
-        if (strlen(&line[5]) >= NAME_SIZE-1)
+        if (strlen(&line[5]) > NAME_SIZE-1)
             ERROR_OUT("Nome de equipa demasiado longo na linha %lu. Lido: '%s'", count, line);
 
         tmp.awayTeam=TeamFind(&line[5]);
@@ -115,7 +124,7 @@ void ReadGames() {
             ERROR_OUT("Nome de equipa não encontrado (ou inválido) na linha %lu. Lido: '%s'", count, line);
 
         if ((r=readStringFile(line, 100, file)) == 0)
-            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma data). na linha %lu", count);
+            ERROR_OUT("Fim do ficheiro inesperado (esperava-se uma data). na linha %lu%s", count, ".");
         count++;
 
         if (!strCaseEqualn(line, "Data:",5))
@@ -127,7 +136,7 @@ void ReadGames() {
             ERROR_OUT("Erro ao interpretar a data na linha %lu. Lido: '%s'", count, line);
 
         if ((r=readStringFile(line, 100, file)) == 0)
-            ERROR_OUT("Fim do ficheiro inesperado (esperava-se um resultado). na linha %lu", count);
+            ERROR_OUT("Fim do ficheiro inesperado (esperava-se um resultado). na linha %lu%s", count, ".");
         count++;
 
         if (!strCaseEqualn(line, "Resultado:",10))
@@ -147,12 +156,14 @@ void ReadGames() {
 }
 
 
-// Write
+/* Write */
 void WriteGames(void) {
-    FILE *file = fopen ("games.txt", "w");
+    FILE*file;
+    list_t* node;
+    file = fopen ("games.txt", "w");
     if (!file)
-        ERROR_OUT("Erro ao abrir o ficheiro dos jogos.%s","\n");
-    list_t* node = Games->next;
+        ERROR_OUT("Não foi possível abir o ficheiro dos %s%s","jogos", ".");
+    node = Games->next;
 
     while (node->next != NULL) {
         Game* game = GAMELIST_GAME(node);

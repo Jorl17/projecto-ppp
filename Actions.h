@@ -1,4 +1,4 @@
-#include "datatypes.h" // Team*, Game* (last one is forward declared)
+#include "datatypes.h" /* Team*, Game* (forward declared) */
 extern bool ClearScreen;
 
 void clearScreen(void);

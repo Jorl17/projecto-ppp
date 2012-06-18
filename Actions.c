@@ -10,9 +10,10 @@
 #include "ScoreBoardList.h"
 #include "saveload.h"
 #include "Actions.h"
-
 #define ASSERT assert
 
+/* define CLRSCRN_STANDARD to have a very portable solution that clears the
+  screen and makes the output appear in the lower-bottom at the screen. */
 void clearScreen(void) {
 #if !defined(CLRSCRN_STANDARD) && (defined(__unix__) || defined(unix) || defined(__unix) || defined (__linux) || defined(__linux__) || defined(linux))
     system("clear");
@@ -78,7 +79,7 @@ void ShowGames(void) {
     printf("___________________________________________________________________________________________\n"
            "| id |        Equipa da Casa        |  Resu.  |       Equipa Visitante       |    Data    |\n"
            "|^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^|\n");
-    /* ex:  |1   |           FC Porto           |xxx - yyy|           SL Bosta           |  3/ 4/1994 |\n); */
+    /* ex:  |1   |           FC Porto           |xxx - yyy|           SL Benfica         |  3/ 4/1994 |\n); */
     if (LastGameList == NULL) {
         local = Games->next;
         while(local->next) {
@@ -220,6 +221,9 @@ void DeleteGame(char* input) {
     int id;
     ASSERT(input);
     if (!*input) {
+        /* This section could be improved with a new function that coded to
+          receive a message, an error message and gather a choice.
+          It works this way, though. */
         char line[100];
         ShowGames();
         printf("A tabela mais recente de jogos esta por cima desta frase.\n");

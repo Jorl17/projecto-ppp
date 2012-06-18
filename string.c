@@ -62,7 +62,7 @@ size_t readString(char* str, size_t maxlen) {
 }
 
 /*
- Checks if a string is a number.
+ Checks if a string is a positive whole number.
  */
 bool isStrNumber(const char* s) {
   while ( *s ) {

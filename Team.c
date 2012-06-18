@@ -8,10 +8,13 @@
 int TeamGetPoints(Team* team) {
     list_t* tmp;
     ASSERT(team);
-    // If there isn't anything cached yet.
+    /* If there isn't anything cached yet. */
     if (team->points==-1) {
         team->points=0;
         if (!team->gameList) {
+            /* Since team->points != -1, TeamUpdateGameListCache will update
+               the points for us.
+              */
             TeamUpdateGameListCache(team, NULL);
         } else {
             tmp= team->gameList->next;
@@ -25,6 +28,11 @@ int TeamGetPoints(Team* team) {
     return team->points;
 }
 
+/*
+  This code could be more efficient. It is like this because of a design failure
+  that was only found really next to the deadline of the project (points weren't
+  being kept for each game, just the outcome).
+ */
 void TeamPointsUpdateWithGame(Team* team, Game* game, bool remove) {
     int pts=0;
     uint8_t outcome;
@@ -32,13 +40,13 @@ void TeamPointsUpdateWithGame(Team* team, Game* game, bool remove) {
     ASSERT(game);
     outcome = getOutcomeFromGame(game);
     if (game->homeTeam == team) {
-        // We play home
+        /* We play home */
         if ( outcome == OUTCOME_HOMEWIN)
             pts = 3;
         else if (outcome == OUTCOME_DRAW)
             pts = 1;
     } else {
-        // We play away
+        /* We play away */
         if ( outcome == OUTCOME_AWAYWIN)
             pts = 3;
         else if (outcome == OUTCOME_DRAW)
@@ -53,7 +61,6 @@ void TeamPointsUpdateWithGame(Team* team, Game* game, bool remove) {
 
 void TeamUpdateGameListCache(Team* team, list_t* gameNode) {
     ASSERT(team);
-    //ASSERT(gameNode); This can be NULL, in case we just want to create it once.
 
     if (!team->gameList) {
         list_t* iter = Games;

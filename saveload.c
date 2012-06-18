@@ -148,7 +148,7 @@ void ReadGames() {
 
 
 // Write
-void UpdateGames(void) {
+void WriteGames(void) {
     FILE *file = fopen ("games.txt", "w");
     if (!file)
         ERROR_OUT("Erro ao abrir o ficheiro dos jogos.%s","\n");

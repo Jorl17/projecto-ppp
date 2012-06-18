@@ -287,7 +287,7 @@ void DeleteGame(char* input) {
         if (ScoreboardList)
             ScoreboardListUpdate(ScoreboardList, g);
         ListDel(iter); /* This effectively DELETES the game from memory */
-        UpdateGames();
+        WriteGames();
     } else {
         list_t* tmp;
         iter = LastGameList->next;

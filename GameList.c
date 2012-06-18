@@ -29,7 +29,7 @@ list_t* GameListAddGame(list_t* list, Game game, bool update) {
 
     /* Update file FIXME */
     if(update)
-        UpdateGames();
+        WriteGames();
     return tmp;
 }
 uint8_t getOutcomeFromGame(Game* g) {

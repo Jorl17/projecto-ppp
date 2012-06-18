@@ -4,6 +4,6 @@
 void ReadFiles();
 void ReadTeams();
 void ReadGames();
-void UpdateGames(void);
+void WriteGames(void);
 
 #endif /* SAVELOAD_H */

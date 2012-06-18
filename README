@@ -1,0 +1,5 @@
+O ficheiro Projecto.linux64 corresponde à forma compilada do programa após
+executar o comando
+gcc *.c -Wall -Wextra -ansi -pedantic -pedantic-errors -Werror -g -oProjecto.linux64
+
+numa máquina 64 bits num kernel "2.6.38-gentoo-r6" modificado.

@@ -40,7 +40,7 @@ void ReadTeams() {
     size_t count=0;
     FILE *file = fopen ("teams.txt", "r");
     if (!file)
-        ERROR_OUT("Erro ao abrir o ficheiro das equipas.%s","\n");
+        ERROR_OUT("Não foi possível abir o ficheiro das equipas.%s","\n");
     NUM_TEAMS = 0;
 
     while (readStringFile(line, 100, file)) {
@@ -83,7 +83,7 @@ void ReadGames() {
     size_t count=0;
     FILE *file = fopen ("games.txt", "r");
     if (!file)
-        ERROR_OUT("Erro ao abrir o ficheiro dos jogos.%s","\n");
+        ERROR_OUT("Não foi possível abir o ficheiro dos jogos.%s","\n");
     Game tmp;
     Games = ListNew();
     while (readStringFile(line, 100, file)) {
